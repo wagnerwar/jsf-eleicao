@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 public class Login extends Base { 
 	public String loginUsuario;
 	public String senhaUsuario;
-	public String mensagem;
+	
 	public static String login = "admin";
 	public static String senha = "admin";
 	
@@ -29,14 +29,6 @@ public class Login extends Base {
 	
 	public String getSenhaUsuario() {
 		return this.senhaUsuario;
-	}
-	
-	public String getMensagem() {
-		return this.mensagem;
-	}
-	
-	public void setMensagem(String mensagem) {
-		this.mensagem = mensagem;
 	}
 	
 	public String logar() {
@@ -65,5 +57,4 @@ public class Login extends Base {
 		}	
 	}
 	
-
 }

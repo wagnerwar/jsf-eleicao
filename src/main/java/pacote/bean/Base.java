@@ -5,6 +5,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 public class Base {
+	
+	public String mensagem;
 
 	public Boolean autenticaUsuario() {
 		Boolean retorno = false;
@@ -27,5 +29,13 @@ public class Base {
 		}
 		
 		return retorno;
+	}
+	
+	public String getMensagem() {
+		return this.mensagem;
+	}
+	
+	public void setMensagem(String mensagem) {
+		this.mensagem = mensagem;
 	}
 }

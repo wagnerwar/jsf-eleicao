@@ -28,13 +28,4 @@ public class Index extends Base {
 		}
 	}
 	
-	public String getMensagem() {
-		return this.mensagem;
-	}
-	
-	public void setMensagem(String mensagem) {
-		this.mensagem = mensagem;
-	}
-	
-	
 }
