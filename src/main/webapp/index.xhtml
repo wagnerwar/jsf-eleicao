@@ -7,11 +7,21 @@
 <h:head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Sistema de eleições</title>
+    <h:outputStylesheet library = "css" name = "main.css" /> 
 </h:head>
 <h:body>
-   
-	<div class="mensagem" style="color: red;">
-		<h:outputText value ="#{index.mensagem}" />
-	</div> 
+	<p:layout fullPage="true">
+   		<p:layoutUnit position="north" size="50">
+			<h:outputText value="TOPO" />
+		</p:layoutUnit>
+		<p:layoutUnit position="center">
+			
+			<h:outputText value ="Seja bemvindo"  />
+			
+			<div class="mensagem">
+				<h:outputText value ="#{index.mensagem}" />
+			</div> 
+		</p:layoutUnit>
+	</p:layout>
 </h:body>
 </html>

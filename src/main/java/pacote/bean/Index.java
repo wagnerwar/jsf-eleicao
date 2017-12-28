@@ -14,8 +14,6 @@ public class Index extends Base {
 	
 	@PostConstruct
 	public void init() {
-		System.out.println("Inicialização feita");
-		
 		// TODO: Checar se usuário está logado
 		if(this.autenticaUsuario() == false) {
 			FacesContext facesContext = FacesContext.getCurrentInstance();
