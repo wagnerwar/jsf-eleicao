@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>LOGIN</title>
+</h:head>
+<h:body>
+	<p:layout style="max-width: 1000px; min-height:400px;">
+	
+	<p:layoutUnit position="center">
+	    <h3>LOGIN</h3>
+	    
+	    <h:form id="frmLogin" name="frmLogin" >
+	    	<div>
+	    		<h:outputLabel value="Login:"/>
+				<h:inputText value="#{login.loginUsuario}"/>
+	    	</div>
+	    	<div>
+	    		<h:outputLabel value="Senha:"/>
+				<h:inputSecret value="#{login.senhaUsuario}" />
+	    	</div>
+	    	<br></br>
+			<div>
+				<h:commandButton  value="Login" icon="ui-icon-star"  action="#{login.logar}" />
+			</div>
+			
+			<br></br>
+			<div class="mensagem" style="color: red;">
+				<h:outputText value ="#{login.mensagem}" />
+			</div>
+	    </h:form>
+    </p:layoutUnit>
+    </p:layout>
+</h:body>
+</html>
