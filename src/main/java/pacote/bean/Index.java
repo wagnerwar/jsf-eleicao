@@ -8,22 +8,13 @@ import javax.servlet.http.HttpServletResponse;
 
 
 @ManagedBean(name = "index")
-public class Index extends Base {
+public class Index extends BaseUsuarioLogado {
 
 	public String mensagem;
 	
 	@PostConstruct
 	public void init() {
-		// TODO: Checar se usuário está logado
-		if(this.autenticaUsuario() == false) {
-			FacesContext facesContext = FacesContext.getCurrentInstance();
-			HttpServletResponse resposta = (HttpServletResponse) facesContext.getExternalContext().getResponse();
-			try {
-				resposta.sendRedirect("login.xhtml");
-			}catch(Exception ex) {
-				ex.printStackTrace();
-			}					
-		}
+		super.init();
 	}
 	
 }

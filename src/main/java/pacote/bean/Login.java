@@ -34,6 +34,10 @@ public class Login extends Base {
 	public String logar() {
 		System.out.println("Houve clique de login");
 		System.out.println("Login informado: " + this.getLoginUsuario());
+		if(this.getLoginUsuario().equals("") && this.getSenhaUsuario().equals("")) {
+			this.setMensagem("Favor digitar Usuário e senha");
+			return "login";
+		}
 		if(this.getLoginUsuario().equals(Login.login) && this.getSenhaUsuario().equals(Login.senha)) {
 			// Guardando informações de usuário na sessão
 			try {
