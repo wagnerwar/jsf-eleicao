@@ -19,7 +19,7 @@
 	    <h:form id="frmLogin" name="frmLogin" >
 	    	<div>
 	    		<h:outputLabel value="Login:"/>
-				<h:inputText value="#{login.loginUsuario}"/>
+				<h:inputText value="#{login.loginUsuario}" required="true" requiredMessage="Campo Login deve ser digitado" placeholder="Login"/>
 	    	</div>
 	    	<div>
 	    		<h:outputLabel value="Senha:"/>

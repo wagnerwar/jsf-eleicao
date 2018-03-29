@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      >
+    <body>
+<ui:composition template="layout.xhtml">
+  <ui:define name="replace">   
+	<f:metadata>
+    	<f:event listener="#{indexe.before}" type="preRenderView" />
+   	</f:metadata>      
+    <h1>
+    	<h:outputText value ="Cadastro de cargos eletivos"  />
+    </h1>
+		<h:form id="frmCargo" name="frmCargo" >
+		<h:panelGrid columns="4" cellpadding="5">
+				<h:outputLabel value="Nome:"/>
+				<h:inputText value="#{cargo.nome}" />
+	    	
+	    		<h:outputLabel value="Descrição:"/>
+				<h:inputText value="#{cargo.descricao}" />
+	    		
+	    		<h:outputLabel value="Status:"/>
+				<p:selectOneListbox id="status" value="#{selectOneView.option}">
+		            <f:selectItem itemLabel="Ativo" itemValue="1" />
+		            <f:selectItem itemLabel="Inativo" itemValue="0" />
+        		</p:selectOneListbox>
+	    	
+	    		<f:facet name="footer">
+	    			<h:commandButton  value="Cadastrar cargo" icon="ui-icon-disk"  action="#{cargo.cadastrar}" />
+				</f:facet>	
+				
+			
+		</h:panelGrid>
+		<div class="mensagem">
+				<h:outputText value ="#{cargo.mensagem}" />
+			</div>
+	    </h:form> 
+  </ui:define>
+</ui:composition>
+</body>
+</html>

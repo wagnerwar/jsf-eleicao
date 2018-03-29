@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-@ManagedBean(name = "index")
+@ManagedBean(name = "indexe")
 @SessionScoped()
 public class Index extends BaseUsuarioLogado {
 
@@ -25,6 +25,7 @@ public class Index extends BaseUsuarioLogado {
 	
 	public void before(ComponentSystemEvent event) {
 		System.out.print("Chamada função BEFORE");
+		super.init();
 	}
 	
 }

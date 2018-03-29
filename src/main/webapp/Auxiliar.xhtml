@@ -8,14 +8,20 @@
       xmlns:f="http://java.sun.com/jsf/core"
       >
     <body>
-    	
-	    <ui:composition template="layout.xhtml">
-	    	<ui:define name="replace"> 
-	    		<f:metadata>
-    				<f:event listener="#{indexe.before}" type="preRenderView" />
-    			</f:metadata>  		         
-    			<h:outputText value ="Seja bemvindo" style="text-align: center"  />
-  			</ui:define>
-	    </ui:composition>
-    </body>
+<ui:composition template="layout.xhtml">
+  <ui:define name="replace">   
+	<f:metadata>
+    	<f:event listener="#{indexe.before}" type="preRenderView" />
+   	</f:metadata>      
+    <h1>
+    	<h:outputText value ="Ítens auxiliares"  />
+    </h1>
+	<div style="text-align: center;">
+		<p:menu>
+			<p:menuitem value="Cargo eletivo" url="cargo.xhtml" />
+		</p:menu>
+	</div> 
+  </ui:define>
+</ui:composition>
+</body>
 </html>
