@@ -13,16 +13,21 @@
 	<f:metadata>
     	<f:event listener="#{indexe.before}" type="preRenderView" />
    	</f:metadata>      
-    <h1>
-    	<h:outputText value ="Cadastro de cargos eletivos"  />
-    </h1>
-		<h:form id="frmCargo" name="frmCargo" >
-		<h:panelGrid columns="4" cellpadding="5">
+    	<h:form id="frmCargo" name="frmCargo" >
+		<p:messages id="messages" showDetail="true" closable="true" autoUpdate="true">
+        		
+    	</p:messages>
+		<h:panelGrid columns="4" cellpadding="5" id="formulario">
+				<f:facet name="header">
+					<h1>
+						<h:outputText value ="Cadastro de cargos eletivos"  />
+					</h1>
+				</f:facet>
 				<h:outputLabel value="Nome:"/>
-				<h:inputText value="#{cargo.nome}" />
+				<p:inputText value="#{cargo.nome}" id="nome" required="true" requiredMessage="Campo Nome deve ser digitado" />
 	    	
 	    		<h:outputLabel value="Descrição:"/>
-				<h:inputText value="#{cargo.descricao}" />
+				<p:inputText value="#{cargo.descricao}" id="descricao" />
 	    		
 	    		<h:outputLabel value="Status:"/>
 				<p:selectOneListbox id="status" value="#{selectOneView.option}">
@@ -31,14 +36,11 @@
         		</p:selectOneListbox>
 	    	
 	    		<f:facet name="footer">
-	    			<h:commandButton  value="Cadastrar cargo" icon="ui-icon-disk"  action="#{cargo.cadastrar}" />
+	    			<p:commandButton  value="Cadastrar cargo" icon="ui-icon-disk"  action="#{cargo.cadastrar}" update="formulario" />
 				</f:facet>	
-				
-			
+					
 		</h:panelGrid>
-		<div class="mensagem">
-				<h:outputText value ="#{cargo.mensagem}" />
-			</div>
+		
 	    </h:form> 
   </ui:define>
 </ui:composition>

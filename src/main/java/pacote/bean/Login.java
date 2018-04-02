@@ -1,5 +1,6 @@
 package pacote.bean;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -35,7 +36,8 @@ public class Login extends Base {
 		System.out.println("Houve clique de login");
 		System.out.println("Login informado: " + this.getLoginUsuario());
 		if(this.getLoginUsuario().equals("") && this.getSenhaUsuario().equals("")) {
-			this.setMensagem("Favor digitar Usuário e senha");
+			this.setMensagem("Formulário não validado");
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", this.getMensagem()));
 			return "login";
 		}
 		if(this.getLoginUsuario().equals(Login.login) && this.getSenhaUsuario().equals(Login.senha)) {
@@ -47,15 +49,17 @@ public class Login extends Base {
 				// Guardando o cookie
 				FacesContext context = FacesContext.getCurrentInstance();
 				((HttpServletResponse) context.getExternalContext().getResponse()).addCookie(cookie);
-				HttpServletResponse resposta = (HttpServletResponse)  context.getExternalContext().getResponse();
-				resposta.sendRedirect("index.xhtml");
-				
+				//HttpServletResponse resposta = (HttpServletResponse)  context.getExternalContext().getResponse();
+				FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+				FacesContext.getCurrentInstance().responseComplete();
+				return "index";
 			}catch(Exception ex) {
 				ex.printStackTrace();
 			}
 			return "login";
 		}else {
 			this.setMensagem("Usuário/senha incorretos");
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", this.getMensagem()));
 			System.out.println(this.getMensagem());
 			return "login";
 		}	

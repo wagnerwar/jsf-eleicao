@@ -15,27 +15,22 @@
 	
 	<p:layoutUnit position="center">
 	    <h3>LOGIN</h3>
-	    
-	    <h:form id="frmLogin" name="frmLogin" >
-	    	<div>
-	    		<h:outputLabel value="Login:"/>
-				<h:inputText value="#{login.loginUsuario}" required="true" requiredMessage="Campo Login deve ser digitado" placeholder="Login"/>
-	    	</div>
-	    	<div>
-	    		<h:outputLabel value="Senha:"/>
-				<h:inputSecret value="#{login.senhaUsuario}" />
-	    	</div>
-	    	<br></br>
-			<div>
-				<h:commandButton  value="Login" icon="ui-icon-star"  action="#{login.logar}" />
-			</div>
-			
-			<br></br>
-			<div class="mensagem">
-				<h:outputText value ="#{login.mensagem}" />
-			</div>
-	    </h:form>
-	    
+	        <p:messages id="messages" showDetail="true" closable="true" autoUpdate="true">
+        		
+    		</p:messages>
+	    	<h:form id="frmLogin" name="frmLogin" >
+				<h:panelGrid columns="4" cellpadding="5" id="formulario">
+		    		<h:outputLabel value="Login:"/>
+					<p:inputText value="#{login.loginUsuario}" id="login"  placeholder="Login" required="true" requiredMessage="Campo Login deve ser digitado" />
+		   
+		    		<h:outputLabel value="Senha:"/>
+					<p:password value="#{login.senhaUsuario}" id="senha" required="true" requiredMessage="Senha deve ser informada" />
+					
+					<f:facet name="footer">
+						<p:commandButton  value="Login" icon="ui-icon-disk" action="#{login.logar}"  type="submit"  update="formulario"/>
+					</f:facet>
+				</h:panelGrid>
+		    </h:form>
     </p:layoutUnit>
     </p:layout>
 </h:body>
