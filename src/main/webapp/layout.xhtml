@@ -12,7 +12,7 @@
 </h:head>
 <h:body>
 	<p:layout fullPage="true">
-   		<p:layoutUnit position="north" size="70">
+   		<p:layoutUnit position="north" size="150">
    			<ui:insert name="menu">
    				<ui:include src="menu.xhtml"></ui:include>
    			</ui:insert>		
@@ -22,6 +22,12 @@
 			<ui:insert name="replace">
 			</ui:insert>
 			 
+		</p:layoutUnit>
+		<p:layoutUnit position="south" size="50">
+			<ui:insert name="footer">
+				<ui:include src="footer.xhtml"></ui:include>
+			</ui:insert>
+			
 		</p:layoutUnit>
 	</p:layout>
 </h:body>

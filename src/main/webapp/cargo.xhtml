@@ -30,7 +30,7 @@
 				<p:inputText value="#{cargo.descricao}" id="descricao" />
 	    		
 	    		<h:outputLabel value="Status:"/>
-				<p:selectOneListbox id="status" value="#{selectOneView.option}">
+				<p:selectOneListbox id="status" value="#{cargo.status}">
 		            <f:selectItem itemLabel="Ativo" itemValue="1" />
 		            <f:selectItem itemLabel="Inativo" itemValue="0" />
         		</p:selectOneListbox>
