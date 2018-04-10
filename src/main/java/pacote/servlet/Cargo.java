@@ -1,4 +1,4 @@
-package pacote.bean;
+package pacote.servlet;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -13,16 +13,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.bson.Document;
 import pacote.dao.ConexaoMongo;
-import com.mongodb.client.MongoDatabase; 
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient; 
 import com.mongodb.client.MongoCollection; 
+import pacote.dao.CargoDB;
+import pacote.bean.CargoBean;
 
 @ManagedBean(name = "cargo")
 @ViewScoped
-public class Cargo {
-	private String nome;
-	private String descricao;
-	private String status;
+public class Cargo extends BaseUsuarioLogado{
+	public String nome;
+	public String descricao;
+	public String status;
+	public String id;
 	
 	public String getNome() {
 		return this.nome;
@@ -48,15 +52,42 @@ public class Cargo {
 		this.status = status;
 	}
 	
+	public String getId() {
+		return this.id;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	
 	public void cadastrar() {
 		try {
-			ConexaoMongo conn = new ConexaoMongo();
-			MongoDatabase db = conn.getDb();
+			CargoDB model = new CargoDB();
+			CargoBean cargoBean = new CargoBean();
+			cargoBean.nome = this.getNome();
+			cargoBean.descricao = this.getDescricao();
+			cargoBean.status = this.getStatus();
+			
+			if(model.cadastrar(cargoBean)) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "success", "Registro inserido com sucesso"));
+			}else {
+				throw new Exception("Erro ao inserir documento");
+			}
+			
+			this.limpar();
 			
 		}catch(Exception ex) {
 			ex.printStackTrace();
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", ex.getMessage()));
 			
 		}
+	}
+	
+	public void limpar() {
+		this.setDescricao(null);
+		this.setNome(null);
+		this.setStatus(null);
+		this.setId(null);
 	}
 }

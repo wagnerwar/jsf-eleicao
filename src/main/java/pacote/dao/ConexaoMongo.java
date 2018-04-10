@@ -7,7 +7,7 @@ import com.mongodb.client.MongoCollection;
 
 public class ConexaoMongo {
 	public static String db = "eleicao";
-	
+	public static String cl_cargo = "cargo";
 	public MongoClient getConexao() {
 		MongoClient mongo = new MongoClient( "localhost" , 27017 );
 		return mongo;

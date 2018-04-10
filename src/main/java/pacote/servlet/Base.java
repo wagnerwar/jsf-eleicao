@@ -1,4 +1,4 @@
-package pacote.bean;
+package pacote.servlet;
 
 import java.io.IOException;
 

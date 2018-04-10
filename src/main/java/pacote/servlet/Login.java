@@ -1,4 +1,4 @@
-package pacote.bean;
+package pacote.servlet;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
