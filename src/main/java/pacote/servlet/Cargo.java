@@ -1,5 +1,8 @@
 package pacote.servlet;
 
+import java.io.Serializable;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -22,11 +25,25 @@ import pacote.bean.CargoBean;
 
 @ManagedBean(name = "cargo")
 @ViewScoped
-public class Cargo extends BaseUsuarioLogado{
+public class Cargo extends BaseUsuarioLogado implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 	public String nome;
 	public String descricao;
 	public String status;
 	public String id;
+	public List<CargoBean> cargos;
+	
+	@PostConstruct
+    public void init() {
+		try {
+			CargoDB model = new CargoDB();
+			this.cargos = model.listarCargos();
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", ex.getMessage()));			
+		}
+    }
 	
 	public String getNome() {
 		return this.nome;
@@ -60,6 +77,13 @@ public class Cargo extends BaseUsuarioLogado{
 		this.id = id;
 	}
 	
+	public void setCargos(List<CargoBean> cargos) {
+		this.cargos = cargos;
+	}
+	
+	public List<CargoBean> getCargos(){
+		return this.cargos;
+	}
 	
 	public void cadastrar() {
 		try {

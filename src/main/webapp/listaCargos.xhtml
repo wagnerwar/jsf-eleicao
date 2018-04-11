@@ -13,7 +13,35 @@
 	<f:metadata>
     	<f:event listener="#{indexe.before}" type="preRenderView" />
    	</f:metadata>      
-    	 
+    	 <h:panelGrid columns="6" cellpadding="5" id="formulario">
+				<f:facet name="header">
+					<h1>
+						<h:outputText value ="Listagem de cargos"  />
+					</h1>
+				</f:facet>
+				
+				<p:dataTable var="elemento" value="#{cargo.cargos}">
+				    <p:column headerText="Id">
+				        <h:outputText value="#{elemento.id}" />
+				    </p:column>
+				 
+				    <p:column headerText="Nome">
+				        <h:outputText value="#{elemento.nome}" />
+				    </p:column>
+				 
+				    <p:column headerText="Descrição">
+				        <h:outputText value="#{elemento.descricao}" />
+				    </p:column>
+				 
+				    <p:column headerText="Status">
+				        <h:outputText value="NADA" />
+				    </p:column>
+				</p:dataTable>
+				
+	    		<f:facet name="footer">
+	    				<p:button id="botaoCad" value="Cadastrar cargos" icon="ui-icon-plus" outcome="cargo.xhtml"></p:button>
+	    		</f:facet>					
+		</h:panelGrid>
   </ui:define>
 </ui:composition>
 </body>
