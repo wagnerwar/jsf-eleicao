@@ -12,7 +12,8 @@
   <ui:define name="replace">   
 	<f:metadata>
     	<f:event listener="#{indexe.before}" type="preRenderView" />
-   	</f:metadata>      
+   	</f:metadata>
+   		<h:form id="formTela">      
     	 <h:panelGrid columns="6" cellpadding="5" id="formulario">
 				<f:facet name="header">
 					<h1>
@@ -25,7 +26,7 @@
 				        <h:outputText value="#{elemento.id}" />
 				    </p:column>
 				 
-				    <p:column headerText="Nome">
+				    <p:column headerText="Nome" sortBy="#{elemento.nome}">
 				        <h:outputText value="#{elemento.nome}" />
 				    </p:column>
 				 
@@ -34,7 +35,13 @@
 				    </p:column>
 				 
 				    <p:column headerText="Status">
-				        <h:outputText value="NADA" />
+				        <h:outputText value="#{elemento.status}" />
+				    </p:column>
+				    
+				    <p:column headerText="Ações">
+				    	<p:commandButton update="formTela:editForm" oncomplete="PF('editForm').show()" icon="ui-icon-edit" title="Editar">
+                			<f:setPropertyActionListener value="#{elemento}" target="#{cargo.selecionado}" />
+            			</p:commandButton>
 				    </p:column>
 				</p:dataTable>
 				
@@ -42,6 +49,27 @@
 	    				<p:button id="botaoCad" value="Cadastrar cargos" icon="ui-icon-plus" outcome="cargo.xhtml"></p:button>
 	    		</f:facet>					
 		</h:panelGrid>
+		<p:dialog  header="Edição de cargo" widgetVar="editForm"  showEffect="fade" hideEffect="fade">
+			<p:outputPanel id="editForm" style="text-align:center;">
+				<p:panelGrid  columns="2" rendered="#{not empty cargo.selecionado}">
+					<h:outputLabel value="Nome:"/>
+					<p:inputText value="#{cargo.selecionado.nome}" id="nome" required="true" requiredMessage="Campo Nome deve ser digitado" />
+		    	
+		    		<h:outputLabel value="Descrição:"/>
+					<p:inputText value="#{cargo.selecionado.descricao}" id="descricao" />
+		    		
+		    		<h:outputLabel value="Status:"/>
+					<p:selectOneListbox id="status" value="#{cargo.selecionado.status}">
+			            <f:selectItem itemLabel="Ativo" itemValue="1" />
+			            <f:selectItem itemLabel="Inativo" itemValue="0" />
+	        		</p:selectOneListbox>
+	        		<f:facet name="footer">
+	    				<p:commandButton  value="Editar" icon="ui-icon-save"  action="#{cargo.atualizar}" update="formulario" />	    			
+					</f:facet>	
+				</p:panelGrid>
+			</p:outputPanel>
+		</p:dialog>
+		</h:form>
   </ui:define>
 </ui:composition>
 </body>

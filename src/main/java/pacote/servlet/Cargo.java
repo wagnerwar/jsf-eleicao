@@ -33,6 +33,7 @@ public class Cargo extends BaseUsuarioLogado implements Serializable{
 	public String status;
 	public String id;
 	public List<CargoBean> cargos;
+	public CargoBean selecionado;
 	
 	@PostConstruct
     public void init() {
@@ -104,7 +105,26 @@ public class Cargo extends BaseUsuarioLogado implements Serializable{
 		}catch(Exception ex) {
 			ex.printStackTrace();
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", ex.getMessage()));
-			
+		}
+	}
+	
+	public void atualizar() {
+		try {
+			CargoDB model = new CargoDB();
+			CargoBean cargoBean = new CargoBean();
+			cargoBean.nome = this.getSelecionado().getNome();
+			cargoBean.descricao = this.getSelecionado().getDescricao();
+			cargoBean.status = this.getSelecionado().getStatus();
+			cargoBean.id = this.getSelecionado().getId();
+			boolean retorno = model.atualizar(cargoBean);
+			if(retorno == true) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", "Sucesso ao atualizar registro"));
+			}else {
+				throw new Exception("Erro ao atualizar registros");
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", ex.getMessage()));
 		}
 	}
 	
@@ -113,5 +133,13 @@ public class Cargo extends BaseUsuarioLogado implements Serializable{
 		this.setNome(null);
 		this.setStatus(null);
 		this.setId(null);
+	}
+	
+	public CargoBean getSelecionado() {
+		return this.selecionado;
+	}
+	
+	public void setSelecionado(CargoBean selecionado) {
+		this.selecionado = selecionado;
 	}
 }
