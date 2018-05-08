@@ -119,6 +119,7 @@ public class Cargo extends BaseUsuarioLogado implements Serializable{
 			boolean retorno = model.atualizar(cargoBean);
 			if(retorno == true) {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "success", "Sucesso ao atualizar registro"));
+				this.cargos = model.listarCargos();
 			}else {
 				throw new Exception("Erro ao atualizar registros");
 			}

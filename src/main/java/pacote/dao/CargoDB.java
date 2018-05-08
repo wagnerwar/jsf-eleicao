@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.bson.Document;
+import org.bson.types.ObjectId;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -48,7 +50,7 @@ public class CargoDB extends ConexaoMongo {
 				documento.put("nome", campos.nome );
 				documento.put("descricao", campos.descricao );
 				documento.put("status", campos.status );
-				//colection.replaceOne(eq("_id", campos.id), documento);			
+				colection.replaceOne(eq("_id", new ObjectId(campos.id)), documento);			
 			}
 			return true;
 		}catch(Exception ex) {
