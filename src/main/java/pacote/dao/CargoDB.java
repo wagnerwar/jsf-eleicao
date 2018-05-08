@@ -45,12 +45,29 @@ public class CargoDB extends ConexaoMongo {
 			MongoDatabase db = conn.getDb();
 			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_cargo);
 			if(colection != null) {
-				System.out.println("ID do registro a ser alterado: " + campos.id);
 				Document documento = new Document();
 				documento.put("nome", campos.nome );
 				documento.put("descricao", campos.descricao );
 				documento.put("status", campos.status );
 				colection.replaceOne(eq("_id", new ObjectId(campos.id)), documento);			
+			}
+			return true;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean excluir(CargoBean campos) {
+		ConexaoMongo conn = new ConexaoMongo();
+		try {
+			
+			MongoDatabase db = conn.getDb();
+			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_cargo);
+			if(colection != null) {
+				Document documento = new Document();
+				documento.put("_id",  new ObjectId(campos.id) );
+				colection.deleteOne(documento);
 			}
 			return true;
 		}catch(Exception ex) {
