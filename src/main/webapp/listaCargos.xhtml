@@ -13,7 +13,9 @@
 	<f:metadata>
     	<f:event listener="#{indexe.before}" type="preRenderView" />
    	</f:metadata>
-   		<h:form id="formTela">      
+   		<h:form id="formTela">
+   		<p:messages id="messages" showDetail="true" closable="true" autoUpdate="true">
+    	</p:messages>   
     	 <h:panelGrid columns="6" cellpadding="5" id="formulario">
 				<f:facet name="header">
 					<h1>
@@ -35,7 +37,7 @@
 				    </p:column>
 				 
 				    <p:column headerText="Status">
-				        <h:outputText value="#{elemento.status}" />
+				        <h:outputText value="#{elemento.statusDescricao}" />
 				    </p:column>
 				    
 				    <p:column headerText="Ações">
@@ -64,7 +66,7 @@
 			            <f:selectItem itemLabel="Inativo" itemValue="0" />
 	        		</p:selectOneListbox>
 	        		<f:facet name="footer">
-	    				<p:commandButton  value="Editar" icon="ui-icon-save"  action="#{cargo.atualizar}" update="formulario" />	    			
+	    				<p:commandButton  value="Editar" icon="ui-icon-save"  action="#{cargo.atualizar}" update="formTela" />	    			
 					</f:facet>	
 				</p:panelGrid>
 			</p:outputPanel>

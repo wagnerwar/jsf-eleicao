@@ -2,18 +2,17 @@ package pacote.dao;
 
 import com.mongodb.client.MongoDatabase;
 import pacote.bean.CargoBean;
-
+import pacote.config.ConfigStatus;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.bson.Document;
-
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import static com.mongodb.client.model.Projections.*;
 import static com.mongodb.client.model.Filters.*;
+import pacote.config.ConfigStatus;
 
 public class CargoDB extends ConexaoMongo {
 
@@ -38,17 +37,18 @@ public class CargoDB extends ConexaoMongo {
 	}
 	
 	public boolean atualizar(CargoBean campos) {
+		ConexaoMongo conn = new ConexaoMongo();
 		try {
-			ConexaoMongo conn = new ConexaoMongo();
+			
 			MongoDatabase db = conn.getDb();
 			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_cargo);
 			if(colection != null) {
+				System.out.println("ID do registro a ser alterado: " + campos.id);
 				Document documento = new Document();
 				documento.put("nome", campos.nome );
 				documento.put("descricao", campos.descricao );
 				documento.put("status", campos.status );
-				//colection.updateOne(eq("_id", campos.id), documento);
-				
+				//colection.replaceOne(eq("_id", campos.id), documento);			
 			}
 			return true;
 		}catch(Exception ex) {
@@ -64,7 +64,6 @@ public class CargoDB extends ConexaoMongo {
 			MongoDatabase db = conn.getDb();
 			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_cargo);
 			if(colection != null) {
-				//MongoCursor<Document> cursor = colection.find(fields(include("nome", "descricao", "status"))).iterator();
 				MongoCursor<Document> cursor = colection.find().iterator();
 				try {
 					lista = new ArrayList<CargoBean>();
@@ -75,6 +74,11 @@ public class CargoDB extends ConexaoMongo {
 				        elemento.nome = doc.get("nome", "").toString();
 				        elemento.descricao = doc.get("descricao", "").toString();
 				        elemento.status = doc.get("status", "0").toString();
+				        if(elemento.status.equals(ConfigStatus.ATIVO.valor())) {
+				        	elemento.statusDescricao = ConfigStatus.DESCRICAO_ATIVO.valor();
+						}else if(elemento.status.equals(ConfigStatus.INATIVO.valor())) {
+							elemento.statusDescricao = ConfigStatus.DESCRICAO_INATIVO.valor();
+						}
 				        lista.add(elemento);
 				    }
 				} finally {

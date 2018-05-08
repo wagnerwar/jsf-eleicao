@@ -12,7 +12,6 @@ public class BaseUsuarioLogado extends Base {
 	
 	@PostConstruct
 	public void init() {
-		System.out.print("Chamada função de checagem de login");
 		if(this.autenticaUsuario() == false) {
 			FacesContext facesContext = FacesContext.getCurrentInstance();
 			HttpServletResponse resposta = (HttpServletResponse) facesContext.getExternalContext().getResponse();

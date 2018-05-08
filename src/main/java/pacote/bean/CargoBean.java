@@ -1,12 +1,14 @@
 package pacote.bean;
 
 import java.io.Serializable;
+import pacote.config.ConfigStatus;
 
 public class CargoBean implements Serializable {
 	public String nome;
 	public String descricao;
 	public String status;
 	public String id;
+	public String statusDescricao;
 	
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -38,6 +40,14 @@ public class CargoBean implements Serializable {
 	
 	public String getId() {
 		return this.id;
+	}
+	
+	public void setStatusDescricao(String nome) {
+		this.statusDescricao = nome;
+	}
+	
+	public String getStatusDescricao() {
+		return this.statusDescricao;
 	}
 	
 }
