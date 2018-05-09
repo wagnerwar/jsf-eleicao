@@ -118,9 +118,28 @@ public class Cargo extends BaseUsuarioLogado implements Serializable{
 			cargoBean.id = this.getSelecionado().getId();
 			boolean retorno = model.atualizar(cargoBean);
 			if(retorno == true) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", "Sucesso ao atualizar registro"));
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "success", "Sucesso ao atualizar registro"));
+				this.cargos = model.listarCargos();
 			}else {
 				throw new Exception("Erro ao atualizar registros");
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", ex.getMessage()));
+		}
+	}
+
+	public void excluir() {
+		try {
+			CargoDB model = new CargoDB();
+			CargoBean cargoBean = new CargoBean();
+			cargoBean.id = this.getSelecionado().getId();
+			boolean retorno = model.excluir(cargoBean);
+			if(retorno == true) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "success", "Sucesso ao excluir registro"));
+				this.cargos = model.listarCargos();
+			}else {
+				throw new Exception("Erro ao remover registro");
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();

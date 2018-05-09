@@ -20,11 +20,9 @@ public class Index extends BaseUsuarioLogado {
 	
 	@PostConstruct
 	public void init() {
-		System.out.print("Chamada função INIT");
 	}
 	
 	public void before(ComponentSystemEvent event) {
-		System.out.print("Chamada função BEFORE");
 		super.init();
 	}
 	
