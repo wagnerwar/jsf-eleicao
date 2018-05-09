@@ -48,6 +48,10 @@
             			<p:commandButton update="formTela"  icon="ui-icon ui-icon-close" title="Excluir" action="#{cargo.excluir}" >
                 			<f:setPropertyActionListener value="#{elemento}" target="#{cargo.selecionado}" />
             			</p:commandButton>
+            			
+            			<p:commandButton update="formTela"  icon="ui-icon-exc" title="Excluir" action="#{cargo.excluir}" >
+                			<f:setPropertyActionListener value="#{elemento}" target="#{cargo.selecionado}" />
+            			</p:commandButton>
 				    </p:column>
 				</p:dataTable>
 				
