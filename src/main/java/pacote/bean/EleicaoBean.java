@@ -1,0 +1,74 @@
+package pacote.bean;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
+import pacote.config.ConfigStatus;
+
+public class EleicaoBean implements Serializable{
+	public String nome;
+	public String descricao;
+	public String id;
+	public String status;
+	List<CargoBean> cargos;
+	public Date dataInicio;
+	public Date dataFim;
+	
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+	
+	public String getNome() {
+		return this.nome;
+	}
+	
+	public void setDescricao(String nome) {
+		this.descricao = nome;
+	}
+	
+	public String getDescricao() {
+		return this.descricao;
+	}
+	
+	public void setStatus(String nome) {
+		this.status = nome;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+	
+	public void setId(String nome) {
+		this.id = nome;
+	}
+	
+	public String getId() {
+		return this.id;
+	}
+	
+	public void setCargos(List<CargoBean> cargos) {
+		this.cargos = cargos;
+	}
+	
+	public List<CargoBean> getCargos(){
+		return this.cargos;
+	}
+	
+	public void setDataInicio(Date dt_inicio) {
+		this.dataInicio = dt_inicio;
+	}
+	
+	public Date getDataInicio() {
+		return this.dataInicio;
+	}
+	
+	public void setDataFim(Date dt_fim) {
+		this.dataFim = dt_fim;
+	}
+	
+	public Date getDataFim() {
+		return this.dataFim;
+	}
+	
+}

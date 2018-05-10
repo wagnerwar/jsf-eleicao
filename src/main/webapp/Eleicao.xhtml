@@ -5,11 +5,51 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
       >
     <body>
 <ui:composition template="layout.xhtml">
   <ui:define name="replace">         
-    <h:outputText value ="Eleição" style="text-align: center"  />
+    <f:metadata>
+    	<f:event listener="#{indexe.before}" type="preRenderView" />
+   	</f:metadata>
+   	<h:form id="frmEleicao" name="frmEleicao" >
+		<p:messages id="messages" showDetail="true" closable="true" autoUpdate="true">
+    	</p:messages>
+    	<h:inputHidden id="id" value="#{eleicao.eleicao.id}" />
+		<h:panelGrid columns="4" cellpadding="5" id="formulario">
+				<f:facet name="header">
+					<h1>
+						<h:outputText value ="Cadastro de eleições"  />
+					</h1>
+				</f:facet>
+				<h:outputLabel value="Nome:"/>
+				<p:inputText value="#{eleicao.eleicao.nome}" id="nome" required="true" requiredMessage="Campo Nome deve ser digitado" />
+	    	
+	    		<h:outputLabel value="Descrição:"/>
+				<p:inputText value="#{eleicao.eleicao.descricao}" id="descricao" />
+	    		
+	    		<h:outputLabel value="Status:"/>
+				<p:selectOneListbox id="status" value="#{eleicao.eleicao.status}">
+		            <f:selectItem itemLabel="Ativo" itemValue="1" />
+		            <f:selectItem itemLabel="Inativo" itemValue="0" />
+        		</p:selectOneListbox>
+        		
+        		<h:outputLabel value="Data de início:" for="inicio"/>
+        		<p:calendar id="inicio" value="#{eleicao.eleicao.dataInicio}" mode="inline" required="true" requiredMessage="Campo Data de Início deve ser digitado" effect="fade"  />
+
+        		<h:outputLabel value="Data de fim:" for="fim"/>
+        		<p:calendar id="fim" value="#{eleicao.eleicao.dataFim}" mode="inline" required="true" requiredMessage="Campo Data de Fim deve ser digitado" effect="fade"/>
+        		
+	    		<f:facet name="footer">
+	    			<p:commandButton  value="Cadastrar eleição" icon="ui-icon-plus"  action="#{eleicao.cadastrar}" update="formulario" />
+	    			<p:commandButton  value="Limpar" icon="ui-icon ui-icon-scissors"  action="#{eleicao.limpar}" update="frmEleicao" />
+	    			<p:button value="Voltar" outcome="index.xhtml" ></p:button>
+				</f:facet>	
+					
+		</h:panelGrid>
+		
+	    </h:form>    
   </ui:define>
 </ui:composition>
 </body>
