@@ -14,6 +14,9 @@ public class EleicaoBean implements Serializable{
 	List<CargoBean> cargos;
 	public Date dataInicio;
 	public Date dataFim;
+	public String statusDescricao;
+	public String dataInicioDescricao;
+	public String dataFimDescricao;
 	
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -69,6 +72,30 @@ public class EleicaoBean implements Serializable{
 	
 	public Date getDataFim() {
 		return this.dataFim;
+	}
+	
+	public void setStatusDescricao(String nome) {
+		this.statusDescricao = nome;
+	}
+	
+	public String getStatusDescricao() {
+		return this.statusDescricao;
+	}
+	
+	public void setDataInicioDescricao(String nome) {
+		this.dataInicioDescricao = nome;
+	}
+	
+	public String getDataInicioDescricao() {
+		return this.dataInicioDescricao;
+	}
+	
+	public void setDataFimDescricao(String nome) {
+		this.dataFimDescricao = nome;
+	}
+	
+	public String getDataFimDescricao() {
+		return this.dataFimDescricao;
 	}
 	
 }

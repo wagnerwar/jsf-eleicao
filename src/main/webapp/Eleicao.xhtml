@@ -16,39 +16,78 @@
    	<h:form id="frmEleicao" name="frmEleicao" >
 		<p:messages id="messages" showDetail="true" closable="true" autoUpdate="true">
     	</p:messages>
-    	<h:inputHidden id="id" value="#{eleicao.eleicao.id}" />
-		<h:panelGrid columns="4" cellpadding="5" id="formulario">
+    	<h:panelGrid columns="6" cellpadding="5" id="formulario">
 				<f:facet name="header">
 					<h1>
-						<h:outputText value ="Cadastro de eleições"  />
+						<h:outputText value ="Listagem de eleições"  />
 					</h1>
 				</f:facet>
-				<h:outputLabel value="Nome:"/>
-				<p:inputText value="#{eleicao.eleicao.nome}" id="nome" required="true" requiredMessage="Campo Nome deve ser digitado" />
-	    	
-	    		<h:outputLabel value="Descrição:"/>
-				<p:inputText value="#{eleicao.eleicao.descricao}" id="descricao" />
-	    		
-	    		<h:outputLabel value="Status:"/>
-				<p:selectOneListbox id="status" value="#{eleicao.eleicao.status}">
-		            <f:selectItem itemLabel="Ativo" itemValue="1" />
-		            <f:selectItem itemLabel="Inativo" itemValue="0" />
-        		</p:selectOneListbox>
-        		
-        		<h:outputLabel value="Data de início:" for="inicio"/>
-        		<p:calendar id="inicio" value="#{eleicao.eleicao.dataInicio}" mode="inline" required="true" requiredMessage="Campo Data de Início deve ser digitado" effect="fade"  />
-
-        		<h:outputLabel value="Data de fim:" for="fim"/>
-        		<p:calendar id="fim" value="#{eleicao.eleicao.dataFim}" mode="inline" required="true" requiredMessage="Campo Data de Fim deve ser digitado" effect="fade"/>
-        		
+				
+				<p:dataTable var="elemento" value="#{eleicao.eleicoes}">
+				    <p:column headerText="Id">
+				        <h:outputText value="#{elemento.id}" />
+				    </p:column>
+				 
+				    <p:column headerText="Nome" sortBy="#{elemento.nome}">
+				        <h:outputText value="#{elemento.nome}" />
+				    </p:column>
+				 
+				    <p:column headerText="Descrição">
+				        <h:outputText value="#{elemento.descricao}" />
+				    </p:column>
+				 
+				    <p:column headerText="Status">
+				        <h:outputText value="#{elemento.statusDescricao}" />
+				    </p:column>
+				    
+				    <p:column headerText="Data de início">
+				        <h:outputText value="#{elemento.dataInicioDescricao}" />
+				    </p:column>
+				    
+				    <p:column headerText="Data de finalização">
+				        <h:outputText value="#{elemento.dataFimDescricao}" />
+				    </p:column>
+				    
+				    <p:column headerText="Ações">
+				    
+				    </p:column>
+				</p:dataTable>
+				
 	    		<f:facet name="footer">
-	    			<p:commandButton  value="Cadastrar eleição" icon="ui-icon-plus"  action="#{eleicao.cadastrar}" update="formulario" />
-	    			<p:commandButton  value="Limpar" icon="ui-icon ui-icon-scissors"  action="#{eleicao.limpar}" update="frmEleicao" />
-	    			<p:button value="Voltar" outcome="index.xhtml" ></p:button>
-				</f:facet>	
-					
+	    				<p:commandButton update="formTela:cadForm" oncomplete="PF('cadForm').show()" icon="ui-icon ui-icon-plus" title="Cadastrar">
+            			</p:commandButton>
+	    				
+	    		</f:facet>					
 		</h:panelGrid>
+		<p:dialog  header="Inclusão de eleição" widgetVar="cadForm"  showEffect="fade" hideEffect="fade">
+			<p:outputPanel id="cadForm" style="text-align:center;">
+				<p:panelGrid  columns="2">
+						<h:inputHidden id="id" value="#{eleicao.eleicao.id}" />
+						<h:outputLabel value="Nome:"/>
+						<p:inputText value="#{eleicao.eleicao.nome}" id="nome" required="true" requiredMessage="Campo Nome deve ser digitado" />
+			    	
+			    		<h:outputLabel value="Descrição:"/>
+						<p:inputText value="#{eleicao.eleicao.descricao}" id="descricao" />
+			    		
+			    		<h:outputLabel value="Status:"/>
+						<p:selectOneListbox id="status" value="#{eleicao.eleicao.status}" required="true" requiredMessage="Status deve ser selecionado"  >
+				            <f:selectItem itemLabel="Ativo" itemValue="1" />
+				            <f:selectItem itemLabel="Inativo" itemValue="0" />
+		        		</p:selectOneListbox>
+		        		
+		        		<h:outputLabel value="Data de início:" for="inicio"/>
+		        		<p:calendar id="inicio" value="#{eleicao.eleicao.dataInicio}" mode="inline" required="true" requiredMessage="Campo Data de Início deve ser digitado" effect="fade"  />
 		
+		        		<h:outputLabel value="Data de fim:" for="fim"/>
+		        		<p:calendar id="fim" value="#{eleicao.eleicao.dataFim}" mode="inline" required="true" requiredMessage="Campo Data de Fim deve ser digitado" effect="fade"/>
+						
+						<f:facet name="footer">
+	    					<p:commandButton  value="incluir" icon="ui-icon-save"  action="#{eleicao.cadastrar}" update="frmEleicao" />
+	    					<p:commandButton  value="incluir" icon="ui-icon-trash"  action="#{eleicao.limpar}" update="frmEleicao" />	    			
+						</f:facet>	
+				</p:panelGrid>
+			</p:outputPanel>
+		</p:dialog>
 	    </h:form>    
   </ui:define>
 </ui:composition>
