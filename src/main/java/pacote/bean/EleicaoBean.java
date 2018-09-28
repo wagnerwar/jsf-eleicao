@@ -98,4 +98,12 @@ public class EleicaoBean implements Serializable{
 		return this.dataFimDescricao;
 	}
 	
+	public void limpar() {
+		this.setNome(null);
+		this.setStatus(null);
+		this.setDataInicio(null);
+		this.setDataFim(null);
+		this.setId(null);
+	}
+	
 }

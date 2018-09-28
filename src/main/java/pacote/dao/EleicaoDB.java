@@ -51,7 +51,7 @@ public class EleicaoDB extends ConexaoMongo {
 		try {
 			ConexaoMongo conn = new ConexaoMongo();
 			MongoDatabase db = conn.getDb();
-			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_cargo);
+			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_eleicao);
 			if(colection != null) {
 				MongoCursor<Document> cursor = colection.find().iterator();
 				try {
@@ -68,15 +68,18 @@ public class EleicaoDB extends ConexaoMongo {
 						}else if(elemento.status.equals(ConfigStatus.INATIVO.valor())) {
 							elemento.statusDescricao = ConfigStatus.DESCRICAO_INATIVO.valor();
 						}
-				        String dt_inicio = doc.get("dt_inicio", "");
-				        String dt_final = doc.get("dt_fim", "");
-				        System.out.println(dt_inicio);
+				        
+				        elemento.dataInicio = doc.getDate("dt_inicio");
+				        elemento.dataFim = doc.getDate("dt_fim");
+				        
 				        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");     
 				        elemento.dataInicioDescricao = df.format(elemento.dataInicio);
 				        elemento.dataFimDescricao = df.format(elemento.dataFim);
 				        lista.add(elemento);
 				    }
-				} finally {
+				} catch(Exception exx){
+					exx.printStackTrace();
+				}finally {
 				    cursor.close();
 				}
 			}

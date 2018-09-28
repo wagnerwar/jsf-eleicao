@@ -98,19 +98,13 @@ public class Eleicao extends BaseUsuarioLogado implements Serializable {
 		}
 	}
 	
-	public void atualizar() {
-		
-	}
-
+	
 	public void limpar() {
-		this.getEleicao().setNome(null);
-		this.getEleicao().setDescricao(null);
-		this.getEleicao().setId(null);
-		this.getEleicao().setCargos(null);
-		this.getEleicao().setDataFim(null);
-		this.getEleicao().setDataFimDescricao(null);
-		this.getEleicao().setDataInicio(null);
-		this.getEleicao().setDataInicioDescricao(null);
+		this.setEleicao(null);
 		this.setSelecionado(null);
+	}
+	
+	public void excluir() {
+		System.out.println(this.getSelecionado().getId());
 	}
 }

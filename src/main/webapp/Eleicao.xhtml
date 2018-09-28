@@ -13,9 +13,8 @@
     <f:metadata>
     	<f:event listener="#{indexe.before}" type="preRenderView" />
    	</f:metadata>
-   	<h:form id="frmEleicao" name="frmEleicao" >
-		<p:messages id="messages" showDetail="true" closable="true" autoUpdate="true">
-    	</p:messages>
+   	
+				
     	<h:panelGrid columns="6" cellpadding="5" id="formulario">
 				<f:facet name="header">
 					<h1>
@@ -49,20 +48,27 @@
 				    </p:column>
 				    
 				    <p:column headerText="Ações">
-				    
+						<p:commandButton update="formulario" oncomplete="PF('editForm').show()" icon="ui-icon ui-icon-wrench" title="Editar">
+                			<f:setPropertyActionListener value="#{elemento}" target="#{eleicao.selecionado}" />
+            			</p:commandButton>
+            			<p:commandButton update="formulario"  icon="ui-icon ui-icon-close" title="Excluir" action="#{eleicao.excluir}" >
+                			<f:setPropertyActionListener value="#{elemento}" target="#{eleicao.selecionado}" />
+            			</p:commandButton>
 				    </p:column>
 				</p:dataTable>
 				
 	    		<f:facet name="footer">
-	    				<p:commandButton update="formTela:cadForm" oncomplete="PF('cadForm').show()" icon="ui-icon ui-icon-plus" title="Cadastrar">
-            			</p:commandButton>
-	    				
+	    				<p:commandButton  oncomplete="PF('cadForm').show()" icon="ui-icon ui-icon-plus" title="Cadastrar">	    				
+            			</p:commandButton>	    				
 	    		</f:facet>					
 		</h:panelGrid>
+		
 		<p:dialog  header="Inclusão de eleição" widgetVar="cadForm"  showEffect="fade" hideEffect="fade">
-			<p:outputPanel id="cadForm" style="text-align:center;">
+			<p:outputPanel id="formCadastroEleicao" style="text-align:center;">
+				<h:form id="frmEleicao" name="frmEleicao" >
+   					<p:messages id="messages" showDetail="true" closable="true">
+    			</p:messages>
 				<p:panelGrid  columns="2">
-						<h:inputHidden id="id" value="#{eleicao.eleicao.id}" />
 						<h:outputLabel value="Nome:"/>
 						<p:inputText value="#{eleicao.eleicao.nome}" id="nome" required="true" requiredMessage="Campo Nome deve ser digitado" />
 			    	
@@ -76,19 +82,66 @@
 		        		</p:selectOneListbox>
 		        		
 		        		<h:outputLabel value="Data de início:" for="inicio"/>
-		        		<p:calendar id="inicio" value="#{eleicao.eleicao.dataInicio}" mode="inline" required="true" requiredMessage="Campo Data de Início deve ser digitado" effect="fade"  />
+		        		<p:calendar id="inicio" value="#{eleicao.eleicao.dataInicio}" mode="popup" required="true" requiredMessage="Campo Data de Início deve ser digitado" effect="fade"  />
 		
 		        		<h:outputLabel value="Data de fim:" for="fim"/>
-		        		<p:calendar id="fim" value="#{eleicao.eleicao.dataFim}" mode="inline" required="true" requiredMessage="Campo Data de Fim deve ser digitado" effect="fade"/>
+		        		<p:calendar id="fim" value="#{eleicao.eleicao.dataFim}" mode="popup" required="true" requiredMessage="Campo Data de Fim deve ser digitado" effect="fade"/>
 						
 						<f:facet name="footer">
-	    					<p:commandButton  value="incluir" icon="ui-icon-save"  action="#{eleicao.cadastrar}" update="frmEleicao" />
-	    					<p:commandButton  value="incluir" icon="ui-icon-trash"  action="#{eleicao.limpar}" update="frmEleicao" />	    			
+							<p:commandButton  value="incluir" icon="ui-icon-save"  action="#{eleicao.cadastrar}" update="formulario,formCadastroEleicao,messages" ajax="true" />
+	    					<button class="limpar ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left" onclick="javascript:limparCampos(); return false;" >
+	    						<span class="ui-button-icon-left ui-icon ui-c ui-icon-trash"></span>
+	    						<span class="ui-button-text ui-c">Limpar</span>
+	    					</button>	    			
 						</f:facet>	
 				</p:panelGrid>
+				</h:form>			
 			</p:outputPanel>
 		</p:dialog>
-	    </h:form>    
+		
+		<p:dialog  header="Edição de eleição" widgetVar="editForm"  showEffect="fade" hideEffect="fade">
+			<p:outputPanel id="formEdicaoEleicao" style="text-align:center;">
+				<h:form id="frmEdicao" name="frmEdicao" >
+   					<p:messages id="messages_edicao" showDetail="true" closable="true">
+    			</p:messages>
+				<p:panelGrid  columns="2">
+						<h:outputLabel value="Nome:"/>
+						<p:inputText value="#{eleicao.selecionado.nome}" id="edicao_nome" required="true" requiredMessage="Campo Nome deve ser digitado" />
+			    	
+			    		<h:outputLabel value="Descrição:"/>
+						<p:inputText value="#{eleicao.selecionado.descricao}" id="edicao_descricao" />
+			    		
+			    		<h:outputLabel value="Status:"/>
+						<p:selectOneListbox id="edicao_status" value="#{eleicao.selecionado.status}" required="true" requiredMessage="Status deve ser selecionado"  >
+				            <f:selectItem itemLabel="Ativo" itemValue="1" />
+				            <f:selectItem itemLabel="Inativo" itemValue="0" />
+		        		</p:selectOneListbox>
+		        		
+		        		<h:outputLabel value="Data de início:" for="edicao_inicio"/>
+		        		<p:calendar id="edicao_inicio" value="#{eleicao.selecionado.dataInicio}" mode="popup" required="true" requiredMessage="Campo Data de Início deve ser digitado" effect="fade"  />
+		
+		        		<h:outputLabel value="Data de fim:" for="edicao_fim"/>
+		        		<p:calendar id="edicao_fim" value="#{eleicao.selecionado.dataFim}" mode="popup" required="true" requiredMessage="Campo Data de Fim deve ser digitado" effect="fade"/>
+						
+						<f:facet name="footer">
+							<h:inputHidden id="id_eleicao" value="#{eleicao.selecionado.id}" />
+	    					<p:commandButton  value="Editar" icon="ui-icon-save"  action="#{eleicao.atualizar}" update="formulario,formEdicaoEleicao,messages_edicao" ajax="true" />
+	    					<button class="limpar ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left" onclick="javascript:limparCampos(); return false;" >
+	    						<span class="ui-button-icon-left ui-icon ui-c ui-icon-trash"></span>
+	    						<span class="ui-button-text ui-c">Limpar</span>
+	    					</button>	    			
+						</f:facet>	
+				</p:panelGrid>	
+				</h:form>		
+			</p:outputPanel>
+		</p:dialog>
+		
+	    <script type="text/javascript">
+	    function limparCampos(){
+	    	$("#frmEleicao")[0].reset();
+	    	return false;
+	    }
+		</script>    
   </ui:define>
 </ui:composition>
 </body>
