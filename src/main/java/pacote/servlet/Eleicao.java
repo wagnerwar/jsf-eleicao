@@ -105,6 +105,41 @@ public class Eleicao extends BaseUsuarioLogado implements Serializable {
 	}
 	
 	public void excluir() {
-		System.out.println(this.getSelecionado().getId());
+		try {
+			EleicaoDB model = new EleicaoDB();
+			EleicaoBean eleicaoBean = new EleicaoBean();
+			eleicaoBean.id = this.getSelecionado().getId();
+			boolean retorno = model.excluir(eleicaoBean);
+			if(retorno == true) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "success", "Sucesso ao excluir registro"));
+				this.eleicoes = model.listarEleicoes();
+			}else {
+				throw new Exception("Erro ao remover registro");
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", ex.getMessage()));
+		}
+	}
+	
+	public void atualizar() {
+		try {
+			EleicaoDB model = new EleicaoDB();
+			EleicaoBean eleicaoBean = new EleicaoBean();
+			eleicaoBean.nome = this.getSelecionado().getNome();
+			eleicaoBean.descricao = this.getSelecionado().getDescricao();
+			eleicaoBean.status = this.getSelecionado().getStatus();
+			eleicaoBean.id = this.getSelecionado().getId();
+			boolean retorno = model.atualizar(eleicaoBean);
+			if(retorno == true) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "success", "Sucesso ao atualizar registro"));
+				this.eleicoes = model.listarEleicoes();
+			}else {
+				throw new Exception("Erro ao atualizar registros");
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", ex.getMessage()));
+		}
 	}
 }

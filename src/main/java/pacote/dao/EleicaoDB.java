@@ -46,6 +46,48 @@ public class EleicaoDB extends ConexaoMongo {
 		}
 	}
 	
+	public boolean atualizar(EleicaoBean campos) {
+		try {
+			ConexaoMongo conn = new ConexaoMongo();
+			MongoDatabase db = conn.getDb();
+			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_eleicao);
+			if(colection != null) {
+				Document documento = new Document();
+				documento.put("nome", campos.nome );
+				documento.put("descricao", campos.descricao );
+				documento.put("status", campos.status );
+				documento.put("status", campos.status );
+				documento.put("dt_inicio", campos.dataInicio );
+				documento.put("dt_fim", campos.dataFim );
+				documento.put("dt_criacao", new Date());
+				documento.put("cargos", null);
+				colection.replaceOne(eq("_id", new ObjectId(campos.id)), documento);
+			}
+			return true;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean excluir(EleicaoBean campos) {
+		ConexaoMongo conn = new ConexaoMongo();
+		try {
+			
+			MongoDatabase db = conn.getDb();
+			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_eleicao);
+			if(colection != null) {
+				Document documento = new Document();
+				documento.put("_id",  new ObjectId(campos.id) );
+				colection.deleteOne(documento);
+			}
+			return true;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+	
 	public List<EleicaoBean> listarEleicoes(){
 		ArrayList<EleicaoBean> lista = null;
 		try {

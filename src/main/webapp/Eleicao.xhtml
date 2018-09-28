@@ -14,9 +14,11 @@
     	<f:event listener="#{indexe.before}" type="preRenderView" />
    	</f:metadata>
    	
+		<h:form id="frmListagem" name="frmListagem" >
+   			<p:messages id="messagesListagem" showDetail="true" closable="true"></p:messages>
 				
-    	<h:panelGrid columns="6" cellpadding="5" id="formulario">
-				<f:facet name="header">
+    		<h:panelGrid columns="6" cellpadding="5" id="formulario">
+    			<f:facet name="header">
 					<h1>
 						<h:outputText value ="Listagem de eleições"  />
 					</h1>
@@ -48,10 +50,10 @@
 				    </p:column>
 				    
 				    <p:column headerText="Ações">
-						<p:commandButton update="formulario" oncomplete="PF('editForm').show()" icon="ui-icon ui-icon-wrench" title="Editar">
+						<p:commandButton update="formEdicaoEleicao" oncomplete="PF('editForm').show()" icon="ui-icon ui-icon-wrench" title="Editar">
                 			<f:setPropertyActionListener value="#{elemento}" target="#{eleicao.selecionado}" />
             			</p:commandButton>
-            			<p:commandButton update="formulario"  icon="ui-icon ui-icon-close" title="Excluir" action="#{eleicao.excluir}" >
+            			<p:commandButton update="frmListagem:messagesListagem,frmListagem:formulario"  icon="ui-icon ui-icon-close" title="Excluir" action="#{eleicao.excluir}" >
                 			<f:setPropertyActionListener value="#{elemento}" target="#{eleicao.selecionado}" />
             			</p:commandButton>
 				    </p:column>
@@ -61,7 +63,8 @@
 	    				<p:commandButton  oncomplete="PF('cadForm').show()" icon="ui-icon ui-icon-plus" title="Cadastrar">	    				
             			</p:commandButton>	    				
 	    		</f:facet>					
-		</h:panelGrid>
+			</h:panelGrid>
+		</h:form>
 		
 		<p:dialog  header="Inclusão de eleição" widgetVar="cadForm"  showEffect="fade" hideEffect="fade">
 			<p:outputPanel id="formCadastroEleicao" style="text-align:center;">
@@ -88,7 +91,7 @@
 		        		<p:calendar id="fim" value="#{eleicao.eleicao.dataFim}" mode="popup" required="true" requiredMessage="Campo Data de Fim deve ser digitado" effect="fade"/>
 						
 						<f:facet name="footer">
-							<p:commandButton  value="incluir" icon="ui-icon-save"  action="#{eleicao.cadastrar}" update="formulario,formCadastroEleicao,messages" ajax="true" />
+							<p:commandButton  value="incluir" icon="ui-icon-save"  action="#{eleicao.cadastrar}" update="frmListagem:formulario,formCadastroEleicao,messages" ajax="true" />
 	    					<button class="limpar ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left" onclick="javascript:limparCampos(); return false;" >
 	    						<span class="ui-button-icon-left ui-icon ui-c ui-icon-trash"></span>
 	    						<span class="ui-button-text ui-c">Limpar</span>
@@ -124,8 +127,8 @@
 		        		<p:calendar id="edicao_fim" value="#{eleicao.selecionado.dataFim}" mode="popup" required="true" requiredMessage="Campo Data de Fim deve ser digitado" effect="fade"/>
 						
 						<f:facet name="footer">
-							<h:inputHidden id="id_eleicao" value="#{eleicao.selecionado.id}" />
-	    					<p:commandButton  value="Editar" icon="ui-icon-save"  action="#{eleicao.atualizar}" update="formulario,formEdicaoEleicao,messages_edicao" ajax="true" />
+							<p:commandButton  value="Editar" icon="ui-icon-save" update="frmListagem:formulario,formEdicaoEleicao,messages_edicao" action="#{eleicao.atualizar}" ajax="true" />
+	    					
 	    					<button class="limpar ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left" onclick="javascript:limparCampos(); return false;" >
 	    						<span class="ui-button-icon-left ui-icon ui-c ui-icon-trash"></span>
 	    						<span class="ui-button-text ui-c">Limpar</span>
@@ -138,7 +141,10 @@
 		
 	    <script type="text/javascript">
 	    function limparCampos(){
+	    	console.log("LIMPAR CAMPOS");
 	    	$("#frmEleicao")[0].reset();
+	    	
+	    	
 	    	return false;
 	    }
 		</script>    
