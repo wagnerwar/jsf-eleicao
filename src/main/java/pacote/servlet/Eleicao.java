@@ -1,6 +1,7 @@
 package pacote.servlet;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import pacote.dao.CargoDB;
 import pacote.dao.EleicaoDB;
 import pacote.bean.CargoBean;
 import pacote.bean.EleicaoBean;
+import javax.faces.model.SelectItem;
 
 @ManagedBean(name = "eleicao")
 @ViewScoped
@@ -33,7 +35,9 @@ public class Eleicao extends BaseUsuarioLogado implements Serializable {
 	public EleicaoBean selecionado;
 	public EleicaoBean eleicao;
 	public List<EleicaoBean> eleicoes;
-	
+	public List<CargoBean> cargosDisponiveis;
+	public List<String> cargosSelecionados;
+	private List<SelectItem> cargoOpcoes;
 	public EleicaoBean getSelecionado() {
 		return this.selecionado;
 	}
@@ -58,13 +62,42 @@ public class Eleicao extends BaseUsuarioLogado implements Serializable {
 		this.eleicoes = eleicoes;
 	}
 	
+	public List<CargoBean> getCargosDisponiveis() {
+		return this.cargosDisponiveis;
+	}
+	
+	public void setCargosDisponiveis(List<CargoBean> cargos) {
+		this.cargosDisponiveis = cargos;
+	}
+	
+	public List<String> getCargosSelecionados() {
+		return this.cargosSelecionados;
+	}
+	
+	public void setCargosSelecionados(List<String> cargos) {
+		this.cargosSelecionados = cargos;
+	}
+	
+	public List<SelectItem> getcargoOpcoes() {
+		return this.cargoOpcoes;
+	}
+	
+	public void setCargosOpcoes(List<SelectItem> cargos) {
+		this.cargoOpcoes = cargos;
+	}
+	
 	@PostConstruct
     public void init() {
 		try {
 			this.eleicao = new EleicaoBean();
 			EleicaoDB model = new EleicaoDB();
 			this.eleicoes = model.listarEleicoes();
+			this.cargosDisponiveis = new CargoDB().listarCargosAtivos();
+			this.setCargosOpcoes(new ArrayList<SelectItem>());
 			
+			for(CargoBean c : this.cargosDisponiveis) {
+				this.getcargoOpcoes().add(new SelectItem(c.id, c.nome));
+			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", ex.getMessage()));			
@@ -89,6 +122,7 @@ public class Eleicao extends BaseUsuarioLogado implements Serializable {
 			if(db.cadastrar(bean)) {
 				this.limpar();
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "success", "Registro inserido com sucesso"));
+				this.eleicoes = new EleicaoDB().listarEleicoes();
 			}else {
 				throw new Exception("Erro ao inserir registro");
 			}
@@ -122,6 +156,20 @@ public class Eleicao extends BaseUsuarioLogado implements Serializable {
 		}
 	}
 	
+	public boolean habilitarEdicao(EleicaoBean bean) {
+		Date agora = new Date();
+		try {
+			if(agora.compareTo(bean.dataInicio) > 0) {
+				return false;
+			}else {
+				return true;
+			}			
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+	
 	public void atualizar() {
 		try {
 			EleicaoDB model = new EleicaoDB();
@@ -130,12 +178,51 @@ public class Eleicao extends BaseUsuarioLogado implements Serializable {
 			eleicaoBean.descricao = this.getSelecionado().getDescricao();
 			eleicaoBean.status = this.getSelecionado().getStatus();
 			eleicaoBean.id = this.getSelecionado().getId();
+			eleicaoBean.dataInicio = this.getSelecionado().getDataInicio();
+			eleicaoBean.dataFim = this.getSelecionado().getDataFim();
+			Date agora = new Date();
+			
+			if(agora.compareTo(eleicaoBean.dataInicio) > 0) {
+				throw new Exception("Data de início deve ser maior que a data de hoje");
+			}
+			
+			if(eleicaoBean.dataInicio.compareTo(eleicaoBean.dataFim) > 0) {
+				throw new Exception("Data de início deve ser menor que a data fim");
+			}
+			
 			boolean retorno = model.atualizar(eleicaoBean);
 			if(retorno == true) {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "success", "Sucesso ao atualizar registro"));
 				this.eleicoes = model.listarEleicoes();
 			}else {
 				throw new Exception("Erro ao atualizar registros");
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", ex.getMessage()));
+		}
+	}
+	
+	public void adicionarCargo() {
+		try {
+			EleicaoDB db = new EleicaoDB();
+			EleicaoBean bean = this.selecionado;
+			CargoDB cargoDB = new CargoDB();
+			if(this.cargosSelecionados.size() > 0) {
+				bean.setCargos(new ArrayList<CargoBean>());
+				for(String item: this.cargosSelecionados) {
+					CargoBean dados = cargoDB.getCargo(item);
+					if(dados != null) {
+						bean.getCargos().add(dados);					
+					}
+				}
+				boolean retorno = db.adicionarCargo(bean);
+				if(retorno == true) {
+					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "success", "Sucesso ao atualizar registro"));
+					this.eleicoes = new EleicaoDB().listarEleicoes();
+				}else {
+					throw new Exception("Erro ao atualizar registros");
+				}
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();

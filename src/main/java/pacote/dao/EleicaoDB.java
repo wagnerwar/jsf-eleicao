@@ -60,8 +60,28 @@ public class EleicaoDB extends ConexaoMongo {
 				documento.put("dt_inicio", campos.dataInicio );
 				documento.put("dt_fim", campos.dataFim );
 				documento.put("dt_criacao", new Date());
-				documento.put("cargos", null);
-				colection.replaceOne(eq("_id", new ObjectId(campos.id)), documento);
+				colection.updateOne(eq("_id", new ObjectId(campos.id)), new Document("$set", documento));
+			}
+			return true;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean adicionarCargo(EleicaoBean campos) {
+		try {
+			ConexaoMongo conn = new ConexaoMongo();
+			MongoDatabase db = conn.getDb();
+			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_eleicao);
+			List<String>  idsCargo = new ArrayList<String>();
+			for(CargoBean c : campos.getCargos()) {
+				idsCargo.add(c.id);
+			}
+			if(colection != null) {
+				Document documento = new Document();
+				documento.put("cargos", idsCargo);
+				colection.updateOne(eq("_id", new ObjectId(campos.id)), new Document("$set", documento));
 			}
 			return true;
 		}catch(Exception ex) {
