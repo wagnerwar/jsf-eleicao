@@ -27,6 +27,7 @@ import pacote.dao.EleicaoDB;
 import pacote.bean.CargoBean;
 import pacote.bean.EleicaoBean;
 import javax.faces.model.SelectItem;
+import pacote.config.ConfigStatus;
 
 @ManagedBean(name = "eleicao")
 @ViewScoped
@@ -170,6 +171,20 @@ public class Eleicao extends BaseUsuarioLogado implements Serializable {
 		}
 	}
 	
+	public boolean habilitarInclusaoCargo(EleicaoBean bean) {
+		Date agora = new Date();
+		try {
+			if(agora.compareTo(bean.dataInicio) > 0) {
+				return false;
+			}else {
+				return true;
+			}			
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+	
 	public void atualizar() {
 		try {
 			EleicaoDB model = new EleicaoDB();
@@ -183,10 +198,12 @@ public class Eleicao extends BaseUsuarioLogado implements Serializable {
 			Date agora = new Date();
 			
 			if(agora.compareTo(eleicaoBean.dataInicio) > 0) {
+				this.eleicoes = model.listarEleicoes();
 				throw new Exception("Data de início deve ser maior que a data de hoje");
 			}
 			
 			if(eleicaoBean.dataInicio.compareTo(eleicaoBean.dataFim) > 0) {
+				this.eleicoes = model.listarEleicoes();
 				throw new Exception("Data de início deve ser menor que a data fim");
 			}
 			
@@ -227,6 +244,34 @@ public class Eleicao extends BaseUsuarioLogado implements Serializable {
 		}catch(Exception ex) {
 			ex.printStackTrace();
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", ex.getMessage()));
+		}
+	}
+	
+	public void desabilitarEleicao() {
+		try {
+			EleicaoDB model = new EleicaoDB();
+			EleicaoBean eleicaoBean = new EleicaoBean();
+			eleicaoBean.status = ConfigStatus.INATIVO.valor();
+			eleicaoBean.id = this.getSelecionado().getId();
+			System.out.println(eleicaoBean.id);
+			boolean retorno = model.atualizarStatus(eleicaoBean);
+			if(retorno == true) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "success", "Registro desabilitado com sucesso!!"));
+				this.eleicoes = model.listarEleicoes();
+			}else {
+				throw new Exception("Erro ao atualizar registros");
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", ex.getMessage()));
+		}
+	}
+	
+	public boolean isInativo(EleicaoBean eleicaoBean) {
+		if(eleicaoBean.status.equals(ConfigStatus.INATIVO.valor()) ) {
+			return true;
+		}else {
+			return false;
 		}
 	}
 }

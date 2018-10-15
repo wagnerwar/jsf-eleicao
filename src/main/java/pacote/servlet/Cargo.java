@@ -34,6 +34,7 @@ public class Cargo extends BaseUsuarioLogado implements Serializable{
 	public String id;
 	public List<CargoBean> cargos;
 	public CargoBean selecionado;
+	public int quantidade;
 	
 	@PostConstruct
     public void init() {
@@ -86,6 +87,14 @@ public class Cargo extends BaseUsuarioLogado implements Serializable{
 		return this.cargos;
 	}
 	
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
+	}
+	
+	public int getQuantidade() {
+		return this.quantidade;
+	}
+	
 	public void cadastrar() {
 		try {
 			CargoDB model = new CargoDB();
@@ -93,7 +102,7 @@ public class Cargo extends BaseUsuarioLogado implements Serializable{
 			cargoBean.nome = this.getNome();
 			cargoBean.descricao = this.getDescricao();
 			cargoBean.status = this.getStatus();
-			
+			cargoBean.quantidade = this.getQuantidade();
 			if(model.cadastrar(cargoBean)) {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "success", "Registro inserido com sucesso"));
 			}else {
@@ -152,6 +161,7 @@ public class Cargo extends BaseUsuarioLogado implements Serializable{
 		this.setNome(null);
 		this.setStatus(null);
 		this.setId(null);
+		this.setQuantidade(0);
 	}
 	
 	public CargoBean getSelecionado() {

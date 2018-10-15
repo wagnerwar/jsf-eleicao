@@ -90,6 +90,25 @@ public class EleicaoDB extends ConexaoMongo {
 		}
 	}
 	
+	public boolean atualizarStatus(EleicaoBean campos) {
+		try {
+			ConexaoMongo conn = new ConexaoMongo();
+			MongoDatabase db = conn.getDb();
+			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_eleicao);
+			List<String>  idsCargo = new ArrayList<String>();
+			
+			if(colection != null) {
+				Document documento = new Document();
+				documento.put("status", campos.getStatus());
+				colection.updateOne(eq("_id", new ObjectId(campos.getId())), new Document("$set", documento));
+			}
+			return true;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+	
 	public boolean excluir(EleicaoBean campos) {
 		ConexaoMongo conn = new ConexaoMongo();
 		try {
@@ -137,6 +156,17 @@ public class EleicaoDB extends ConexaoMongo {
 				        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");     
 				        elemento.dataInicioDescricao = df.format(elemento.dataInicio);
 				        elemento.dataFimDescricao = df.format(elemento.dataFim);
+				        elemento.cargos = new ArrayList<CargoBean>();
+				        
+				        try {
+				        	elemento.cargosSelected = (List<String>) doc.get("cargos");
+				        	for(String it : elemento.getCargosSelected()) {
+				        		elemento.getCargos().add(new CargoDB().getCargo(it));
+				        	}
+				        }catch(Exception exx) {
+				        	exx.printStackTrace();
+				        }
+				        
 				        lista.add(elemento);
 				    }
 				} catch(Exception exx){

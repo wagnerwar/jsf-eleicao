@@ -11,12 +11,13 @@ public class EleicaoBean implements Serializable{
 	public String descricao;
 	public String id;
 	public String status;
-	List<CargoBean> cargos;
+	public List<CargoBean> cargos;
 	public Date dataInicio;
 	public Date dataFim;
 	public String statusDescricao;
 	public String dataInicioDescricao;
 	public String dataFimDescricao;
+	public List<String> cargosSelected;
 	
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -56,6 +57,14 @@ public class EleicaoBean implements Serializable{
 	
 	public List<CargoBean> getCargos(){
 		return this.cargos;
+	}
+	
+	public void setCargosSelected(List<String> cargos) {
+		this.cargosSelected = cargos;
+	}
+	
+	public List<String> getCargosSelected(){
+		return this.cargosSelected;
 	}
 	
 	public void setDataInicio(Date dt_inicio) {

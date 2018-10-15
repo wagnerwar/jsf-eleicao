@@ -29,6 +29,7 @@ public class CargoDB extends ConexaoMongo {
 				documento.put("descricao", campos.descricao );
 				documento.put("status", campos.status );
 				documento.put("dt_criacao", new Date());
+				documento.put("quantidade", campos.getQuantidade());
 				colection.insertOne(documento);
 			}
 			return true;
@@ -49,6 +50,7 @@ public class CargoDB extends ConexaoMongo {
 				documento.put("nome", campos.nome );
 				documento.put("descricao", campos.descricao );
 				documento.put("status", campos.status );
+				documento.put("quantidade", campos.getQuantidade());
 				colection.replaceOne(eq("_id", new ObjectId(campos.id)), documento);			
 			}
 			return true;
