@@ -50,11 +50,18 @@
 				    </p:column>
 				    
 				    <p:column headerText="Ações">
-						<p:commandButton update="formEdicaoEleicao" oncomplete="PF('editForm').show()" icon="ui-icon ui-icon-wrench" title="Editar">
+				    	<p:commandButton update="frmListagem" action="#{eleicao.desabilitarEleicao()}"  icon="ui-icon ui-icon-trash" title="Desabilitar" rendered="#{!eleicao.habilitarInclusaoCargo(elemento) and !eleicao.isInativo(elemento)}">
                 			<f:setPropertyActionListener value="#{elemento}" target="#{eleicao.selecionado}" />
             			</p:commandButton>
-            			<p:commandButton update="frmListagem:messagesListagem,frmListagem:formulario"  icon="ui-icon ui-icon-close" title="Excluir" action="#{eleicao.excluir}" >
+						<p:commandButton update="formEdicaoEleicao" oncomplete="PF('editForm').show()" icon="ui-icon ui-icon-wrench" title="Editar" rendered="#{(!eleicao.habilitarInclusaoCargo(elemento) and eleicao.isInativo(elemento)) or (eleicao.habilitarInclusaoCargo(elemento))}">
                 			<f:setPropertyActionListener value="#{elemento}" target="#{eleicao.selecionado}" />
+            			</p:commandButton>
+            			<p:commandButton update="frmListagem:messagesListagem,frmListagem:formulario"  icon="ui-icon ui-icon-close" title="Excluir" action="#{eleicao.excluir}" rendered="#{eleicao.habilitarInclusaoCargo(elemento)}" >
+                			<f:setPropertyActionListener value="#{elemento}" target="#{eleicao.selecionado}" />
+            			</p:commandButton>
+            			<p:commandButton update="formAddCargo" oncomplete="PF('addCargos').show()" icon="ui-icon ui-icon-plus" title="Adicionar Cargos" rendered="#{eleicao.habilitarInclusaoCargo(elemento)}">
+                			<f:setPropertyActionListener value="#{elemento}" target="#{eleicao.selecionado}" />
+                			<f:setPropertyActionListener value="#{elemento.cargosSelected}" target="#{eleicao.cargosSelecionados}" />
             			</p:commandButton>
 				    </p:column>
 				</p:dataTable>
@@ -139,12 +146,28 @@
 			</p:outputPanel>
 		</p:dialog>
 		
+		<p:dialog  header="Adicionar cargos" widgetVar="addCargos"  showEffect="fade" hideEffect="fade">
+			<p:outputPanel id="formAddCargo" name="formAddCargo" style="text-align:center;">
+				<h:form id="frmAddCargo" name="frmAddCargo" >
+   					<p:messages id="messages_addCargo" showDetail="true" closable="true">
+    				</p:messages>
+    				<p:panelGrid  columns="4">
+    					<h:outputLabel for="cargos" value="Cargos:" />
+    					<p:selectCheckboxMenu id="cargos" value="#{eleicao.cargosSelecionados}" label="Cargos">
+							<f:selectItems value="#{eleicao.cargoOpcoes}" />
+						</p:selectCheckboxMenu>
+    					<f:facet name="footer">
+							<p:commandButton  value="Adicionar" icon="ui-icon ui-icon-plus" update="frmAddCargo:messages_addCargo,frmAddCargo" action="#{eleicao.adicionarCargo}" ajax="true" />
+						</f:facet>
+    				</p:panelGrid>
+    			</h:form>
+    		</p:outputPanel>
+		</p:dialog>
+		
 	    <script type="text/javascript">
 	    function limparCampos(){
 	    	console.log("LIMPAR CAMPOS");
 	    	$("#frmEleicao")[0].reset();
-	    	
-	    	
 	    	return false;
 	    }
 		</script>    

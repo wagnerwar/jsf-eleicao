@@ -13,10 +13,7 @@
 	<f:metadata>
     	<f:event listener="#{indexe.before}" type="preRenderView" />
    	</f:metadata>
-   		<h:form id="formTela">
-   		<p:messages id="messages" showDetail="true" closable="true" autoUpdate="true">
-    	</p:messages>   
-    	 <h:panelGrid columns="6" cellpadding="5" id="formulario">
+   		 <h:panelGrid columns="6" cellpadding="5" id="formulario">
 				<f:facet name="header">
 					<h1>
 						<h:outputText value ="Listagem de cargos"  />
@@ -41,7 +38,7 @@
 				    </p:column>
 				    
 				    <p:column headerText="Ações">
-				    	<p:commandButton update="formTela:editForm" oncomplete="PF('editForm').show()" icon="ui-icon ui-icon-wrench" title="Editar">
+				    	<p:commandButton update="formTela" oncomplete="PF('editForm').show()" icon="ui-icon ui-icon-wrench" title="Editar">
                 			<f:setPropertyActionListener value="#{elemento}" target="#{cargo.selecionado}" />
             			</p:commandButton>
             			
@@ -53,10 +50,12 @@
 				</p:dataTable>
 				
 	    		<f:facet name="footer">
-	    				<p:button id="botaoCad" value="Cadastrar cargos" icon="ui-icon-plus" outcome="cargo.xhtml"></p:button>
+	    				<p:commandButton id="botaoCad" update="formTelaCadastro" value="Cadastrar cargos" icon="ui-icon-plus" oncomplete="PF('cadForm').show()"></p:commandButton>
 	    		</f:facet>					
 		</h:panelGrid>
 		<p:dialog  header="Edição de cargo" widgetVar="editForm"  showEffect="fade" hideEffect="fade">
+		<h:form id="formTela">
+   		<p:messages id="messages" showDetail="true" closable="true" autoUpdate="true"></p:messages>
 			<p:outputPanel id="editForm" style="text-align:center;">
 				<p:panelGrid  columns="2" rendered="#{not empty cargo.selecionado}">
 					<h:outputLabel value="Nome:"/>
@@ -66,7 +65,7 @@
 					<p:inputText value="#{cargo.selecionado.descricao}" id="descricao" />
 		    		
 		    		<h:outputLabel value="Status:"/>
-					<p:selectOneListbox id="status" value="#{cargo.selecionado.status}">
+					<p:selectOneListbox id="status" value="#{cargo.selecionado.status}" required="true">
 			            <f:selectItem itemLabel="Ativo" itemValue="1" />
 			            <f:selectItem itemLabel="Inativo" itemValue="0" />
 	        		</p:selectOneListbox>
@@ -75,8 +74,35 @@
 					</f:facet>	
 				</p:panelGrid>
 			</p:outputPanel>
+			</h:form>
 		</p:dialog>
-		</h:form>
+		
+		<p:dialog  header="Inclusão de cargo" widgetVar="cadForm"  showEffect="fade" hideEffect="fade">
+		<h:form id="formTelaCadastro">
+   		<p:messages id="messages_cadastro" showDetail="true" closable="true" autoUpdate="true"></p:messages>
+			<p:outputPanel id="cadForm" style="text-align:center;">
+				<p:panelGrid  columns="2">
+					<h:outputLabel value="Nome:"/>
+					<p:inputText value="#{cargo.nome}" id="nome" required="true" requiredMessage="Campo Nome deve ser digitado" />
+		    	
+		    		<h:outputLabel value="Descrição:"/>
+					<p:inputText value="#{cargo.descricao}" id="descricao" />
+		    		
+		    		<h:outputLabel value="Status:"/>
+					<p:selectOneListbox id="status" value="#{cargo.status}" required="true" requiredMessage="Selecione um status">
+			            <f:selectItem itemLabel="Ativo" itemValue="1" />
+			            <f:selectItem itemLabel="Inativo" itemValue="0" />
+	        		</p:selectOneListbox>
+	        		<h:outputLabel value="Quantidade:"/>
+					<p:inputNumber value="#{cargo.quantidade}" id="quantidade" required="true" requiredMessage="Digite a quantidade"/>
+	        		<f:facet name="footer">
+	    				<p:commandButton  value="Editar" icon="ui-icon-save"  action="#{cargo.cadastrar}" update="formTelaCadastro" />	    			
+					</f:facet>	
+				</p:panelGrid>
+			</p:outputPanel>
+			</h:form>
+		</p:dialog>
+		
   </ui:define>
 </ui:composition>
 </body>

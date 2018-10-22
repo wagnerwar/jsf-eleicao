@@ -9,6 +9,7 @@ public class CargoBean implements Serializable {
 	public String status;
 	public String id;
 	public String statusDescricao;
+	public int quantidade;
 	
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -48,6 +49,14 @@ public class CargoBean implements Serializable {
 	
 	public String getStatusDescricao() {
 		return this.statusDescricao;
+	}
+	
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
+	}
+	
+	public int getQuantidade() {
+		return this.quantidade;
 	}
 	
 }
