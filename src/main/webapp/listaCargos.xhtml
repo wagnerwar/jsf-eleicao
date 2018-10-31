@@ -69,6 +69,10 @@
 			            <f:selectItem itemLabel="Ativo" itemValue="1" />
 			            <f:selectItem itemLabel="Inativo" itemValue="0" />
 	        		</p:selectOneListbox>
+	        		<h:outputLabel value="Quantidade:" for="quantidade"/>
+					<p:inputText value="#{cargo.selecionado.quantidade}"  id="quantidade" required="true" requiredMessage="Digite a quantidade" validatorMessage="Especifique uma quantidade válida">
+						<f:validator validatorId="custom.numeroValidator" />
+					</p:inputText>
 	        		<f:facet name="footer">
 	    				<p:commandButton  value="Editar" icon="ui-icon-save"  action="#{cargo.atualizar}" update="formTela" />	    			
 					</f:facet>	
@@ -82,19 +86,21 @@
    		<p:messages id="messages_cadastro" showDetail="true" closable="true" autoUpdate="true"></p:messages>
 			<p:outputPanel id="cadForm" style="text-align:center;">
 				<p:panelGrid  columns="2">
-					<h:outputLabel value="Nome:"/>
+					<h:outputLabel value="Nome:" for="nome"/>
 					<p:inputText value="#{cargo.nome}" id="nome" required="true" requiredMessage="Campo Nome deve ser digitado" />
 		    	
-		    		<h:outputLabel value="Descrição:"/>
+		    		<h:outputLabel value="Descrição:" for="descricao"/>
 					<p:inputText value="#{cargo.descricao}" id="descricao" />
 		    		
-		    		<h:outputLabel value="Status:"/>
+		    		<h:outputLabel value="Status:" for="status"/>
 					<p:selectOneListbox id="status" value="#{cargo.status}" required="true" requiredMessage="Selecione um status">
 			            <f:selectItem itemLabel="Ativo" itemValue="1" />
 			            <f:selectItem itemLabel="Inativo" itemValue="0" />
 	        		</p:selectOneListbox>
-	        		<h:outputLabel value="Quantidade:"/>
-					<p:inputNumber value="#{cargo.quantidade}" id="quantidade" required="true" requiredMessage="Digite a quantidade"/>
+	        		<h:outputLabel value="Quantidade:" for="quantidade"/>
+					<p:inputText value="#{cargo.quantidade}"  id="quantidade" required="true" requiredMessage="Digite a quantidade" validatorMessage="Especifique uma quantidade válida">
+						<f:validator validatorId="custom.numeroValidator" />
+					</p:inputText>
 	        		<f:facet name="footer">
 	    				<p:commandButton  value="Editar" icon="ui-icon-save"  action="#{cargo.cadastrar}" update="formTelaCadastro" />	    			
 					</f:facet>	

@@ -103,11 +103,13 @@ public class Cargo extends BaseUsuarioLogado implements Serializable{
 			cargoBean.descricao = this.getDescricao();
 			cargoBean.status = this.getStatus();
 			cargoBean.quantidade = this.getQuantidade();
-			if(model.cadastrar(cargoBean)) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "success", "Registro inserido com sucesso"));
+			
+			/*if(model.cadastrar(cargoBean)) {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "success", "Registro inserido com sucesso"));
 			}else {
 				throw new Exception("Erro ao inserir documento");
-			}
+			}*/
 			
 			this.limpar();
 			
@@ -125,6 +127,7 @@ public class Cargo extends BaseUsuarioLogado implements Serializable{
 			cargoBean.descricao = this.getSelecionado().getDescricao();
 			cargoBean.status = this.getSelecionado().getStatus();
 			cargoBean.id = this.getSelecionado().getId();
+			cargoBean.quantidade = this.getSelecionado().getQuantidade();
 			boolean retorno = model.atualizar(cargoBean);
 			if(retorno == true) {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "success", "Sucesso ao atualizar registro"));

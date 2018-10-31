@@ -95,6 +95,7 @@ public class CargoDB extends ConexaoMongo {
 				        elemento.nome = doc.get("nome", "").toString();
 				        elemento.descricao = doc.get("descricao", "").toString();
 				        elemento.status = doc.get("status", "0").toString();
+				        elemento.quantidade = doc.getInteger("quantidade", 0);
 				        if(elemento.status.equals(ConfigStatus.ATIVO.valor())) {
 				        	elemento.statusDescricao = ConfigStatus.DESCRICAO_ATIVO.valor();
 						}else if(elemento.status.equals(ConfigStatus.INATIVO.valor())) {
@@ -130,6 +131,7 @@ public class CargoDB extends ConexaoMongo {
 				        elemento.nome = doc.get("nome", "").toString();
 				        elemento.descricao = doc.get("descricao", "").toString();
 				        elemento.status = doc.get("status", "0").toString();
+				        elemento.quantidade = doc.getInteger("quantidade", 0);
 				        if(elemento.status.equals(ConfigStatus.ATIVO.valor())) {
 				        	elemento.statusDescricao = ConfigStatus.DESCRICAO_ATIVO.valor();
 						}else if(elemento.status.equals(ConfigStatus.INATIVO.valor())) {
@@ -167,6 +169,7 @@ public class CargoDB extends ConexaoMongo {
 				        c.nome = doc.get("nome", "").toString();
 				        c.descricao = doc.get("descricao", "").toString();
 				        c.status = doc.get("status", "0").toString();
+				        c.quantidade = doc.getInteger("quantidade", 0);
 				        if(c.status.equals(ConfigStatus.ATIVO.valor())) {
 				        	c.statusDescricao = ConfigStatus.DESCRICAO_ATIVO.valor();
 						}else if(c.status.equals(ConfigStatus.INATIVO.valor())) {
