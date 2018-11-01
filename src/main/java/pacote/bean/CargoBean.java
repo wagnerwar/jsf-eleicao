@@ -4,6 +4,10 @@ import java.io.Serializable;
 import pacote.config.ConfigStatus;
 
 public class CargoBean implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public String nome;
 	public String descricao;
 	public String status;

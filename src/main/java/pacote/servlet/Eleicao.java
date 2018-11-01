@@ -39,6 +39,7 @@ public class Eleicao extends BaseUsuarioLogado implements Serializable {
 	public List<CargoBean> cargosDisponiveis;
 	public List<String> cargosSelecionados;
 	private List<SelectItem> cargoOpcoes;
+	
 	public EleicaoBean getSelecionado() {
 		return this.selecionado;
 	}

@@ -7,6 +7,10 @@ import pacote.config.ConfigStatus;
 
 
 public class CandidatoBean implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public String nome;
 	public String sobrenome;
 	public String cpf;

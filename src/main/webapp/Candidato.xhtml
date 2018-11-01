@@ -5,6 +5,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
       >
     <body>
 <ui:composition template="layout.xhtml">
@@ -12,7 +13,48 @@
   	<f:metadata>
     	<f:event listener="#{indexe.before}" type="preRenderView" />
    	</f:metadata>
-    
+    <h:form id="frmListagem" name="frmListagem" >
+    	<p:messages id="messagesListagem" showDetail="true" closable="true"></p:messages>
+    	<h:panelGrid columns="3" cellpadding="2" id="tabelaEleicao">
+    		<f:facet name="header">
+				<h1>
+					<h:outputText value ="Eleições"  />
+				</h1>
+			</f:facet>
+			<p:dataTable var="elemento" value="#{eleicaoCandidato.eleicoes}">
+				<p:column headerText="Nome">
+					<h:outputText value="#{elemento.nome}" />
+				</p:column> 
+				<p:column headerText="Descrição">
+					<h:outputText value="#{elemento.descricao}" />
+				</p:column>
+				<p:column headerText="Opções">
+					<p:commandButton update="formCargo" oncomplete="PF('cargos').show()" icon="ui-icon ui-icon-plus" title="Cargos">
+                		<f:setPropertyActionListener value="#{elemento}" target="#{eleicaoCandidato.selecionado}" />
+               		</p:commandButton>
+				</p:column>    
+			</p:dataTable>
+			<f:facet name="footer">
+										
+	    	</f:facet>
+			
+		</h:panelGrid>
+    </h:form>
+    <p:dialog  header="Cargos Disponíveis" widgetVar="cargos"  showEffect="fade" hideEffect="fade">
+    	<p:outputPanel id="formCargo" name="formCargo" style="text-align:center;">
+    		<h:form id="frmCargo" name="frmCargo" >
+   				<p:messages id="messages_cargo" showDetail="true" closable="true"></p:messages>
+    			<div>
+    				<ui:repeat value="#{eleicaoCandidato.selecionado.cargos}" var="cargo" rendered="#{eleicaoCandidato.selecionado.cargos.size() > 0}" varStatus="stat">
+ 						<h:panelGrid columns="2" style="width:100%" >	
+	 						<h:outputText value="#{eleicaoCandidato.selecionado.cargos[stat.index].nome}" />
+	 						<p:inputText name="nome_candidato" disabled="true" value="Nenhum"></p:inputText>
+ 						</h:panelGrid>
+ 					</ui:repeat>
+    			</div>
+    		</h:form>
+    	</p:outputPanel>
+    </p:dialog>
   </ui:define>
 </ui:composition>
 </body>

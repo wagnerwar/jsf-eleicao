@@ -181,4 +181,60 @@ public class EleicaoDB extends ConexaoMongo {
 		}
 		return lista;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<EleicaoBean> listarEleicoesAtivasNaoIniciadas(){
+		ArrayList<EleicaoBean> lista = null;
+		try {
+			ConexaoMongo conn = new ConexaoMongo();
+			MongoDatabase db = conn.getDb();
+			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_eleicao);
+			if(colection != null) {
+				MongoCursor<Document> cursor = colection.find(and(eq("status", ConfigStatus.ATIVO.valor()), gt("dt_inicio", new Date()))).iterator();
+				try {
+					lista = new ArrayList<EleicaoBean>();
+					while (cursor.hasNext()) {
+						EleicaoBean elemento = new EleicaoBean();
+				        Document doc = cursor.next();
+				        elemento.id = doc.get("_id").toString();
+				        elemento.nome = doc.get("nome", "").toString();
+				        elemento.descricao = doc.get("descricao", "").toString();
+				        elemento.status = doc.get("status", "0").toString();
+				        if(elemento.status.equals(ConfigStatus.ATIVO.valor())) {
+				        	elemento.statusDescricao = ConfigStatus.DESCRICAO_ATIVO.valor();
+						}else if(elemento.status.equals(ConfigStatus.INATIVO.valor())) {
+							elemento.statusDescricao = ConfigStatus.DESCRICAO_INATIVO.valor();
+						}
+				        
+				        elemento.dataInicio = doc.getDate("dt_inicio");
+				        elemento.dataFim = doc.getDate("dt_fim");
+				        
+				        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");     
+				        elemento.dataInicioDescricao = df.format(elemento.dataInicio);
+				        elemento.dataFimDescricao = df.format(elemento.dataFim);
+				        elemento.cargos = new ArrayList<CargoBean>();
+				        
+				        try {
+				        	elemento.cargosSelected = (List<String>) doc.get("cargos");
+				        	for(String it : elemento.getCargosSelected()) {
+				        		elemento.getCargos().add(new CargoDB().getCargo(it));
+				        	}
+				        }catch(Exception exx) {
+				        	exx.printStackTrace();
+				        }
+				        
+				        lista.add(elemento);
+				    }
+				} catch(Exception exx){
+					exx.printStackTrace();
+				}finally {
+				    cursor.close();
+				}
+			}
+			
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return lista;
+	}
 }

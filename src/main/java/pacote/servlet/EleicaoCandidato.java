@@ -39,6 +39,7 @@ public class EleicaoCandidato extends BaseUsuarioLogado implements Serializable 
 	private static final long serialVersionUID = 1L;
 
 	public List<EleicaoBean> eleicoes;
+	public EleicaoBean selecionado;
 	
 	public List<EleicaoBean> getEleicoes() {
 		return this.eleicoes;
@@ -48,10 +49,18 @@ public class EleicaoCandidato extends BaseUsuarioLogado implements Serializable 
 		this.eleicoes = eleicoes;
 	}
 	
+	public EleicaoBean getSelecionado() {
+		return this.selecionado;
+	}
+	
+	public void setSelecionado(EleicaoBean selecionado) {
+		this.selecionado = selecionado;
+	}
+	
 	@PostConstruct
     public void init() {
 		try {
-			
+			this.setEleicoes(new EleicaoDB().listarEleicoesAtivasNaoIniciadas());
 			
 		}catch(Exception ex) {
 			ex.printStackTrace();
