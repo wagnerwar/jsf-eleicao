@@ -9,7 +9,10 @@
     <body>
 <ui:composition template="layout.xhtml">
   <ui:define name="replace">         
-    <h:outputText value ="Candidatos" style="text-align: center"  />
+  	<f:metadata>
+    	<f:event listener="#{indexe.before}" type="preRenderView" />
+   	</f:metadata>
+    
   </ui:define>
 </ui:composition>
 </body>

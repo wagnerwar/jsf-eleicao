@@ -185,6 +185,15 @@ public class Eleicao extends BaseUsuarioLogado implements Serializable {
 		}
 	}
 	
+	public boolean habilitarExclusaoEleicao(EleicaoBean eleicao) {
+		try {
+			return true;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+	
 	public void atualizar() {
 		try {
 			EleicaoDB model = new EleicaoDB();

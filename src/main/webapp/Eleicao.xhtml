@@ -56,7 +56,7 @@
 						<p:commandButton update="formEdicaoEleicao" oncomplete="PF('editForm').show()" icon="ui-icon ui-icon-wrench" title="Editar" rendered="#{(!eleicao.habilitarInclusaoCargo(elemento) and eleicao.isInativo(elemento)) or (eleicao.habilitarInclusaoCargo(elemento))}">
                 			<f:setPropertyActionListener value="#{elemento}" target="#{eleicao.selecionado}" />
             			</p:commandButton>
-            			<p:commandButton update="frmListagem:messagesListagem,frmListagem:formulario"  icon="ui-icon ui-icon-close" title="Excluir" action="#{eleicao.excluir}" rendered="#{eleicao.habilitarInclusaoCargo(elemento)}" >
+            			<p:commandButton update="frmListagem:messagesListagem,frmListagem:formulario"  icon="ui-icon ui-icon-close" title="Excluir" action="#{eleicao.excluir}" rendered="#{eleicao.habilitarInclusaoCargo(elemento) or eleicao.habilitarExclusaoEleicao(elemento)}" >
                 			<f:setPropertyActionListener value="#{elemento}" target="#{eleicao.selecionado}" />
             			</p:commandButton>
             			<p:commandButton update="formAddCargo" oncomplete="PF('addCargos').show()" icon="ui-icon ui-icon-plus" title="Adicionar Cargos" rendered="#{eleicao.habilitarInclusaoCargo(elemento)}">
