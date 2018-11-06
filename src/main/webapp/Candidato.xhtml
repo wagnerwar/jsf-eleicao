@@ -46,13 +46,22 @@
    				<p:messages id="messages_cargo" showDetail="true" closable="true"></p:messages>
     			<div>
     				<ui:repeat value="#{eleicaoCandidato.selecionado.cargos}" var="cargo" rendered="#{eleicaoCandidato.selecionado.cargos.size() > 0}" varStatus="stat">
- 						<h:panelGrid columns="2" style="width:100%" >	
+ 						<h:panelGrid columns="3" style="width:100%" >	
 	 						<h:outputText value="#{eleicaoCandidato.selecionado.cargos[stat.index].nome}" />
-	 						<p:inputText name="nome_candidato" disabled="true" value="Nenhum"></p:inputText>
+	 						<p:inputText name="nome_cargo" disabled="true"  value="#{eleicaoCandidato.selecionado.cargos[stat.index].quantidade}"></p:inputText>
+	 						<p:commandButton update="formCargo" oncomplete="PF('candidatos').show()" icon="ui-icon ui-icon-plus" title="Adicionar candidatos ao cargo">
+	 							<f:setPropertyActionListener value="#{eleicaoCandidato.selecionado.cargos[stat.index]}" target="#{eleicaoCandidato.cargoSelecionado}" />
+	 						</p:commandButton>
  						</h:panelGrid>
  					</ui:repeat>
     			</div>
     		</h:form>
+    	</p:outputPanel>
+    </p:dialog>
+    
+    <p:dialog  header="Candidatos" widgetVar="candidatos"  showEffect="fade" hideEffect="fade">
+    	<p:outputPanel id="formCandidato" name="formCandidato" style="text-align:center;">
+    		<h:outputText value="Inclusão de Candidato"></h:outputText>
     	</p:outputPanel>
     </p:dialog>
   </ui:define>
