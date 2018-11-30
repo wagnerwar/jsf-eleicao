@@ -49,7 +49,7 @@
  						<h:panelGrid columns="3" style="width:100%" >	
 	 						<h:outputText value="#{eleicaoCandidato.selecionado.cargos[stat.index].nome}" />
 	 						<p:inputText name="nome_cargo" disabled="true"  value="#{eleicaoCandidato.selecionado.cargos[stat.index].quantidade}"></p:inputText>
-	 						<p:commandButton update="formCargo" oncomplete="PF('candidatos').show()" icon="ui-icon ui-icon-plus" title="Adicionar candidatos ao cargo">
+	 						<p:commandButton action="#{candidato.inicializar}" update="formCargo" oncomplete="PF('candidatos').show()" icon="ui-icon ui-icon-plus" title="Adicionar candidatos ao cargo">
 	 							<f:setPropertyActionListener value="#{eleicaoCandidato.selecionado.cargos[stat.index]}" target="#{eleicaoCandidato.cargoSelecionado}" />
 	 						</p:commandButton>
  						</h:panelGrid>
@@ -61,7 +61,22 @@
     
     <p:dialog  header="Candidatos" widgetVar="candidatos"  showEffect="fade" hideEffect="fade">
     	<p:outputPanel id="formCandidato" name="formCandidato" style="text-align:center;">
-    		<h:outputText value="Inclusão de Candidato"></h:outputText>
+    		<h:form id="frmCandidato" name="frmCandidato" >
+    			<p:messages id="messages_candidato" showDetail="true" closable="true"></p:messages>
+    			<h:panelGrid columns="3" cellpadding="2" id="tabelaEleicao">
+    				<f:facet name="header">
+						<h1>
+							<h:outputText value ="Inclusão de candidato"  />
+						</h1>
+						<h:outputLabel value="CPF:"/>
+						<p:inputMask mask="999.999.999-99" id="cpf" value="#{candidato.informacoes.cpf}"  ></p:inputMask>
+					</f:facet>
+					<f:facet name="footer">
+						<p:commandButton  value="incluir" icon="ui-icon-save"  action="#{candidato.salvar}" update="formCandidato" ajax="true" />
+	    			</f:facet>
+			
+		</h:panelGrid>
+    		</h:form>
     	</p:outputPanel>
     </p:dialog>
   </ui:define>
