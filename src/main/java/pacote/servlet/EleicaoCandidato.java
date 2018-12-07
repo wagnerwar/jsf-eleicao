@@ -41,6 +41,7 @@ public class EleicaoCandidato extends BaseUsuarioLogado implements Serializable 
 	public List<EleicaoBean> eleicoes;
 	public EleicaoBean selecionado;
 	public CargoBean cargoSelecionado;
+	public String cpf;
 	
 	public List<EleicaoBean> getEleicoes() {
 		return this.eleicoes;
@@ -65,6 +66,8 @@ public class EleicaoCandidato extends BaseUsuarioLogado implements Serializable 
 	public void setCargoSelecionado(CargoBean cargo) {
 		this.cargoSelecionado = cargo;
 	}
+	
+	
 	
 	@PostConstruct
     public void init() {

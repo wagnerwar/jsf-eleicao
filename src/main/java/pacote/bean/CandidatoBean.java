@@ -11,9 +11,11 @@ public class CandidatoBean implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public String id;
 	public String nome;
 	public String sobrenome;
 	public String cpf;
+	public String cpf_formatado;
 	public Date dataNascimento;
 	public String genero;
 	
@@ -41,6 +43,14 @@ public class CandidatoBean implements Serializable {
 		return this.cpf;
 	}
 	
+	public void setCpfFormatado(String cpf) {
+		this.cpf_formatado = cpf;
+	}
+	
+	public String getCpfFormatado() {
+		return this.cpf_formatado;
+	}
+	
 	public Date getDataNascimento() {
 		return this.dataNascimento;
 	}
@@ -55,5 +65,13 @@ public class CandidatoBean implements Serializable {
 	
 	public String getGenero() {
 		return this.genero;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	public String getId() {
+		return this.id;
 	}
 }

@@ -49,7 +49,7 @@
  						<h:panelGrid columns="3" style="width:100%" >	
 	 						<h:outputText value="#{eleicaoCandidato.selecionado.cargos[stat.index].nome}" />
 	 						<p:inputText name="nome_cargo" disabled="true"  value="#{eleicaoCandidato.selecionado.cargos[stat.index].quantidade}"></p:inputText>
-	 						<p:commandButton action="#{candidato.inicializar}" update="formCargo" oncomplete="PF('candidatos').show()" icon="ui-icon ui-icon-plus" title="Adicionar candidatos ao cargo">
+	 						<p:commandButton action="#{candidato.inicializar}" update="formCargo, formCandidato" oncomplete="PF('candidatos').show()" icon="ui-icon ui-icon-plus" title="Adicionar candidatos ao cargo">
 	 							<f:setPropertyActionListener value="#{eleicaoCandidato.selecionado.cargos[stat.index]}" target="#{eleicaoCandidato.cargoSelecionado}" />
 	 						</p:commandButton>
  						</h:panelGrid>
@@ -63,16 +63,39 @@
     	<p:outputPanel id="formCandidato" name="formCandidato" style="text-align:center;">
     		<h:form id="frmCandidato" name="frmCandidato" >
     			<p:messages id="messages_candidato" showDetail="true" closable="true"></p:messages>
-    			<h:panelGrid columns="3" cellpadding="2" id="tabelaEleicao">
+    			<h:panelGrid columns="2" cellpadding="2" id="tabelaEleicao">
     				<f:facet name="header">
 						<h1>
 							<h:outputText value ="Inclusão de candidato"  />
-						</h1>
-						<h:outputLabel value="CPF:"/>
-						<p:inputMask mask="999.999.999-99" id="cpf" value="#{candidato.informacoes.cpf}"  ></p:inputMask>
+						</h1>						
 					</f:facet>
+					
+					<h:outputLabel value="CPF:" for="cpf"/>
+					<p:inputMask mask="999.999.999-99" title="CPF" id="cpf" name="cpf" value="#{candidato.informacoes.cpf}" required="true" requiredMessage="Campo CPF precisa ter valores">
+						<f:validator validatorId="custom.cpfValidator" />
+					</p:inputMask>
+					
+					<h:outputLabel value="Nome:" for="nome"/>
+					<p:inputText id="nome" name="nome" value="#{candidato.informacoes.nome}" title="Nome" required="true" requiredMessage="Campo Nome deve ser digitado"></p:inputText>
+					
+					<h:outputLabel value="Sobrenome:" for="sobrenome"/>
+					<p:inputText id="sobrenome" name="sobrenome" value="#{candidato.informacoes.sobrenome}" title="Sobrenome" required="true" requiredMessage="Campo Sobrenome deve ser digitado"></p:inputText>
+					
+					<h:outputLabel value="Data de Nascimento:" for="data_nasc"/>
+					<p:calendar title="Data de Nascimento" id="data_nasc" value="#{candidato.informacoes.dataNascimento}" mode="popup" required="true" requiredMessage="Campo Data de Nascimento deve ser preenchido" effect="fade"  />
+					
+					<h:outputLabel value="Gênero:" for="genero"/>
+					<p:selectOneMenu id="genero" value="#{candidato.informacoes.genero}" name="genero" title="Gênero" required="true" requiredMessage="Campo Gênero deve ser selecionado"  >
+						<f:selectItem itemLabel="Selecione" itemValue="" />
+						<f:selectItem itemLabel="Masculino" itemValue="M" />
+            			<f:selectItem itemLabel="Feminino" itemValue="F" />
+					</p:selectOneMenu>
+					
 					<f:facet name="footer">
-						<p:commandButton  value="incluir" icon="ui-icon-save"  action="#{candidato.salvar}" update="formCandidato" ajax="true" />
+						<p:commandButton  value="incluir" icon="ui-icon-save"  action="#{candidato.incluir}" update="formCandidato" ajax="true" />
+						<p:commandButton  value="Limpar" icon="ui-icon-trash" process="@this" update="formCandidato" ajax="true" immediate="true" >
+							<p:resetInput target="formCandidato" />
+						</p:commandButton>
 	    			</f:facet>
 			
 		</h:panelGrid>
