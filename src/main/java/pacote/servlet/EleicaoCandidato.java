@@ -42,6 +42,8 @@ public class EleicaoCandidato extends BaseUsuarioLogado implements Serializable 
 	public EleicaoBean selecionado;
 	public CargoBean cargoSelecionado;
 	public String cpf;
+	public List<SelectItem> vagas;
+	
 	
 	public List<EleicaoBean> getEleicoes() {
 		return this.eleicoes;
@@ -67,7 +69,13 @@ public class EleicaoCandidato extends BaseUsuarioLogado implements Serializable 
 		this.cargoSelecionado = cargo;
 	}
 	
+	public List<SelectItem> getVagas(){
+		return this.vagas;
+	}
 	
+	public void setVagas(List<SelectItem> vagas) {
+		this.vagas = vagas;
+	}
 	
 	@PostConstruct
     public void init() {
@@ -79,4 +87,14 @@ public class EleicaoCandidato extends BaseUsuarioLogado implements Serializable 
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", ex.getMessage()));			
 		}
     }
+	
+	public void gerarVagas() {
+		int x = 0;
+		this.vagas = new ArrayList<SelectItem>();
+		if(this.getCargoSelecionado().quantidade > 0) {
+			for(x = 0; x < this.getCargoSelecionado().quantidade; x++) {
+				this.vagas.add(new SelectItem());
+			}
+		}
+	}
 }

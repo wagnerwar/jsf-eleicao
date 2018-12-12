@@ -49,7 +49,7 @@
  						<h:panelGrid columns="3" style="width:100%" >	
 	 						<h:outputText value="#{eleicaoCandidato.selecionado.cargos[stat.index].nome}" />
 	 						<p:inputText name="nome_cargo" disabled="true"  value="#{eleicaoCandidato.selecionado.cargos[stat.index].quantidade}"></p:inputText>
-	 						<p:commandButton action="#{candidato.inicializar}" update="formCargo, formCandidato" oncomplete="PF('candidatos').show()" icon="ui-icon ui-icon-plus" title="Adicionar candidatos ao cargo">
+ 						<p:commandButton action="#{eleicaoCandidato.gerarVagas()}" update="formCargo, formVaga" oncomplete="PF('vagas').show()" icon="ui-icon ui-icon-plus" title="Adicionar candidatos ao cargo">
 	 							<f:setPropertyActionListener value="#{eleicaoCandidato.selecionado.cargos[stat.index]}" target="#{eleicaoCandidato.cargoSelecionado}" />
 	 						</p:commandButton>
  						</h:panelGrid>
@@ -59,9 +59,25 @@
     	</p:outputPanel>
     </p:dialog>
     
+    <p:dialog  header="Vagas do cargo selecionado" widgetVar="vagas"  showEffect="fade" hideEffect="fade">
+    	<p:outputPanel id="formVaga" name="formVaga" style="text-align:center;">
+    		<h:form id="frmVaga" name="frmVaga" >
+    			<p:messages id="messages_vaga" showDetail="true" closable="true"></p:messages>
+    			<div>
+    				<ui:repeat value="#{eleicaoCandidato.vagas}" var="lacuna" rendered="#{eleicaoCandidato.vagas.size() > 0}" varStatus="stat">
+                    	<h:panelGrid columns="3" style="width:100%" >
+                    		<h:outputLabel value="Cargo : #{stat.index} "/>
+                    		
+                    	</h:panelGrid>        				
+    				</ui:repeat>
+    			</div>
+    		</h:form>
+    	</p:outputPanel>
+    </p:dialog>
+    
     <p:dialog  header="Candidatos" widgetVar="candidatos"  showEffect="fade" hideEffect="fade">
     	<p:outputPanel id="formCandidato" name="formCandidato" style="text-align:center;">
-    		<h:form id="frmCandidato" name="frmCandidato" >
+    		<h:form id="frmCandidato" name="frmCandidato" enctype="multipart/form-data">
     			<p:messages id="messages_candidato" showDetail="true" closable="true"></p:messages>
     			<h:panelGrid columns="2" cellpadding="2" id="tabelaEleicao">
     				<f:facet name="header">
@@ -90,6 +106,9 @@
 						<f:selectItem itemLabel="Masculino" itemValue="M" />
             			<f:selectItem itemLabel="Feminino" itemValue="F" />
 					</p:selectOneMenu>
+					
+					 
+					<p:fileUpload  id="upload" value="#{candidato.file}" multiple="false"  auto="true" update="formCandidato"  />
 					
 					<f:facet name="footer">
 						<p:commandButton  value="incluir" icon="ui-icon-save"  action="#{candidato.incluir}" update="formCandidato" ajax="true" />
