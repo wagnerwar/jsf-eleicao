@@ -18,6 +18,7 @@ public class CandidatoBean implements Serializable {
 	public String cpf_formatado;
 	public Date dataNascimento;
 	public String genero;
+	public String generoDescricao;
 	
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -60,11 +61,25 @@ public class CandidatoBean implements Serializable {
 	}
 	
 	public void setGenero(String genero) {
+		if(genero.equals(ConfigStatus.MASCULINO.valor())) {
+			this.setGeneroDescricao(ConfigStatus.DESCRICAO_MASCULINO.valor());
+		}else if(genero.equals(ConfigStatus.FEMININO.valor())) {
+			this.setGeneroDescricao(ConfigStatus.DESCRICAO_FEMININO.valor());
+		}
 		this.genero = genero;
 	}
 	
 	public String getGenero() {
+		
 		return this.genero;
+	}
+	
+	public void setGeneroDescricao(String genero) {
+		this.generoDescricao = genero;
+	}
+	
+	public String getGeneroDescricao() {
+		return this.generoDescricao;
 	}
 	
 	public void setId(String id) {

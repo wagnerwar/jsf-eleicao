@@ -49,9 +49,9 @@
  						<h:panelGrid columns="3" style="width:100%" >	
 	 						<h:outputText value="#{eleicaoCandidato.selecionado.cargos[stat.index].nome}" />
 	 						<p:inputText name="nome_cargo" disabled="true"  value="#{eleicaoCandidato.selecionado.cargos[stat.index].quantidade}"></p:inputText>
- 						<p:commandButton action="#{eleicaoCandidato.gerarVagas()}" update="formCargo, formVaga" oncomplete="PF('vagas').show()" icon="ui-icon ui-icon-plus" title="Adicionar candidatos ao cargo">
-	 							<f:setPropertyActionListener value="#{eleicaoCandidato.selecionado.cargos[stat.index]}" target="#{eleicaoCandidato.cargoSelecionado}" />
-	 						</p:commandButton>
+	 						<p:commandButton action="#{eleicaoCandidato.gerarVagas()}" update="formCargo, formVaga" oncomplete="PF('vagas').show()" icon="ui-icon ui-icon-plus" title="Adicionar candidatos ao cargo">
+		 							<f:setPropertyActionListener value="#{eleicaoCandidato.selecionado.cargos[stat.index]}" target="#{eleicaoCandidato.cargoSelecionado}" />
+		 					</p:commandButton>
  						</h:panelGrid>
  					</ui:repeat>
     			</div>
@@ -66,10 +66,16 @@
     			<div>
     				<ui:repeat value="#{eleicaoCandidato.vagas}" var="lacuna" rendered="#{eleicaoCandidato.vagas.size() > 0}" varStatus="stat">
                     	<h:panelGrid columns="3" style="width:100%" >
-                    		<h:outputLabel value="Cargo : #{stat.index} "/>
-                    		
+                    		<h:outputLabel value="Cargo : #{stat.index+1} "/>
+                    		<p:inputText name="nome_cargo_#{stat.index+1}" disabled="true"  value="#{lacuna.label}"></p:inputText>
+                    		<p:commandButton  action="#{candidato.listarCandidatos()}" update="formCargo, formVaga, pnlVagaCandidato" oncomplete="PF('candidatos_vaga').show()" icon="ui-icon ui-icon-plus" title="Preencher as vagas">
+		 						<f:setPropertyActionListener value="#{eleicaoCandidato.vagas[stat.index]}" target="#{eleicaoCandidato.vagaSelecionada}" />
+		 					</p:commandButton>
                     	</h:panelGrid>        				
     				</ui:repeat>
+    				<h:panelGrid columns="2" style="width:100%" >
+    					<p:commandButton  value="Candidatos" icon="ui-icon-plus" oncomplete="PF('candidatos').show()"  action="#{candidato.inicializar()}" update="formCandidato" ajax="true" />		
+    				</h:panelGrid>
     			</div>
     		</h:form>
     	</p:outputPanel>
@@ -103,13 +109,10 @@
 					<h:outputLabel value="Gênero:" for="genero"/>
 					<p:selectOneMenu id="genero" value="#{candidato.informacoes.genero}" name="genero" title="Gênero" required="true" requiredMessage="Campo Gênero deve ser selecionado"  >
 						<f:selectItem itemLabel="Selecione" itemValue="" />
-						<f:selectItem itemLabel="Masculino" itemValue="M" />
-            			<f:selectItem itemLabel="Feminino" itemValue="F" />
+						<f:selectItems value="#{candidato.generos}" />
 					</p:selectOneMenu>
 					
 					 
-					<p:fileUpload  id="upload" value="#{candidato.file}" multiple="false"  auto="true" update="formCandidato"  />
-					
 					<f:facet name="footer">
 						<p:commandButton  value="incluir" icon="ui-icon-save"  action="#{candidato.incluir}" update="formCandidato" ajax="true" />
 						<p:commandButton  value="Limpar" icon="ui-icon-trash" process="@this" update="formCandidato" ajax="true" immediate="true" >
@@ -120,6 +123,47 @@
 		</h:panelGrid>
     		</h:form>
     	</p:outputPanel>
+    </p:dialog>
+    <!-- candidatos_vaga -->
+    <p:dialog  header="Seleção de candidatos para a vaga" widgetVar="candidatos_vaga"  showEffect="fade" hideEffect="fade">
+    	<p:outputPanel id="pnlVagaCandidato" name="pnlVagaCandidato" style="text-align:center;">
+    		<h:form id="frmListagemCandidato" name="frmListagemCandidato" enctype="multipart/form-data">
+    			<p:messages id="messages_vaga" showDetail="true" closable="true"></p:messages>
+    			<h:panelGrid columns="6" cellpadding="5" id="tblCandidatos">
+    				<f:facet name="header">
+					<h1>
+						<h:outputText value ="Selecione o candidato para a vaga"  />
+					</h1>
+				</f:facet>
+				<p:dataTable var="c" value="#{candidato.candidatos}">
+					<p:column headerText="Selecione">
+				   
+				    </p:column>
+				    <p:column headerText="Nome">
+				        <h:outputText value="#{c.nome}" />
+				    </p:column>
+				    <p:column headerText="Sobrenome">
+				        <h:outputText value="#{c.sobrenome}" />
+				    </p:column>
+				    <p:column headerText="Cpf">
+				    	<h:outputText value="#{c.cpf}" />
+				    </p:column>
+				    <p:column headerText="Data de Nascimento">
+				        <h:outputText value="#{c.dataNascimento}" />
+				    </p:column>
+				    <p:column headerText="Gênero">
+				        <h:outputText value="#{c.generoDescricao}" />
+				    </p:column>
+				    
+				</p:dataTable>
+				<f:facet name="footer">
+	    				<p:commandButton  icon="ui-icon ui-icon-plus" title="Associar">	    				
+            			</p:commandButton>	    				
+	    		</f:facet>
+    			</h:panelGrid>
+    		</h:form>
+    	</p:outputPanel>
+    	
     </p:dialog>
   </ui:define>
 </ui:composition>

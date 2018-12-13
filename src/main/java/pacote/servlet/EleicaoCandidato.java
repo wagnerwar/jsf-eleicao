@@ -43,7 +43,15 @@ public class EleicaoCandidato extends BaseUsuarioLogado implements Serializable 
 	public CargoBean cargoSelecionado;
 	public String cpf;
 	public List<SelectItem> vagas;
+	public SelectItem vagaSelecionada;
 	
+	public SelectItem getVagaSelecionada() {
+		return this.vagaSelecionada;
+	}
+	
+	public void setVagaSelecionada(SelectItem v) {
+		this.vagaSelecionada = v;
+	}
 	
 	public List<EleicaoBean> getEleicoes() {
 		return this.eleicoes;
@@ -92,8 +100,12 @@ public class EleicaoCandidato extends BaseUsuarioLogado implements Serializable 
 		int x = 0;
 		this.vagas = new ArrayList<SelectItem>();
 		if(this.getCargoSelecionado().quantidade > 0) {
+			SelectItem sl = null;
 			for(x = 0; x < this.getCargoSelecionado().quantidade; x++) {
-				this.vagas.add(new SelectItem());
+				sl = new SelectItem();
+				//sl.setLabel("TESTE");
+				sl.setValue(x);
+				this.vagas.add(sl);
 			}
 		}
 	}

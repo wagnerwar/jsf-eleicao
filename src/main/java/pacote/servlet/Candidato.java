@@ -1,13 +1,16 @@
 package pacote.servlet;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
@@ -17,6 +20,7 @@ import pacote.bean.CandidatoBean;
 import pacote.bean.EleicaoBean;
 import pacote.dao.CandidatoDB;
 import pacote.dao.EleicaoDB;
+import pacote.config.ConfigStatus;
 
 @ManagedBean(name = "candidato")
 @ViewScoped
@@ -27,8 +31,9 @@ public class Candidato extends BaseUsuarioLogado implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private CandidatoBean informacoes;
-	
+	private List<CandidatoBean> candidatos;
 	private UploadedFile file;
+	private List<SelectItem> generos;
 	
 	public UploadedFile getFile() {
         return file;
@@ -78,6 +83,12 @@ public class Candidato extends BaseUsuarioLogado implements Serializable {
 		}
 	}
 	
+	public void listarCandidatos(){
+		CandidatoDB db = new CandidatoDB();
+		List<CandidatoBean> candidatos = db.listarCandidatos();
+		this.candidatos = candidatos;
+	}
+	
 	 public void handleUpload(FileUploadEvent event) {
 		 try {
 			 UploadedFile file = event.getFile();
@@ -115,7 +126,31 @@ public class Candidato extends BaseUsuarioLogado implements Serializable {
 		this.informacoes.setSobrenome(null);
 		this.informacoes.setGenero(null);
 		this.informacoes.setDataNascimento(null);
+		this.definirGeneros();
 		//RequestContext.getCurrentInstance().reslet("frmCandidato");
+	}
+
+	public List<CandidatoBean> getCandidatos() {
+		return candidatos;
+	}
+
+	public void setCandidatos(List<CandidatoBean> candidatos) {
+		this.candidatos = candidatos;
+	}
+
+	public List<SelectItem> getGeneros() {
+		return generos;
+	}
+
+	public void setGeneros(List<SelectItem> generos) {
+		this.generos = generos;
+	}
+	
+	public void definirGeneros() {
+		List<SelectItem> lista = new ArrayList<SelectItem>();
+		lista.add(new SelectItem(ConfigStatus.MASCULINO.valor(), ConfigStatus.DESCRICAO_MASCULINO.valor()));
+		lista.add(new SelectItem(ConfigStatus.FEMININO.valor(), ConfigStatus.DESCRICAO_FEMININO.valor()));
+		this.generos = lista;
 	}
 	
 }
