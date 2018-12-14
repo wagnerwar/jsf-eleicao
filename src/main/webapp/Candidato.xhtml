@@ -136,8 +136,9 @@
 					</h1>
 				</f:facet>
 				<p:dataTable var="c" value="#{candidato.candidatos}">
-					<p:column headerText="Selecione">
-				   
+					<p:column headerText="Ações">
+				   		<p:commandButton update="formVaga" action="#{eleicaoCandidato.preencherVaga(c)}" oncomplete="PF('candidatos_vaga').hide()" icon="ui-icon ui-icon-plus" title="Preencher Vaga" value="Preencher Vaga">	    				
+            			</p:commandButton>
 				    </p:column>
 				    <p:column headerText="Nome">
 				        <h:outputText value="#{c.nome}" />
@@ -156,11 +157,7 @@
 				    </p:column>
 				    
 				</p:dataTable>
-				<f:facet name="footer">
-	    				<p:commandButton  icon="ui-icon ui-icon-plus" title="Associar">	    				
-            			</p:commandButton>	    				
-	    		</f:facet>
-    			</h:panelGrid>
+				</h:panelGrid>
     		</h:form>
     	</p:outputPanel>
     	

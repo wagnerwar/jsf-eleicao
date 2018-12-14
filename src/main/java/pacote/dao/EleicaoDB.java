@@ -1,15 +1,21 @@
 package pacote.dao;
 
 import com.mongodb.client.MongoDatabase;
+
+import pacote.bean.CandidatoBean;
 import pacote.bean.CargoBean;
 import pacote.bean.EleicaoBean;
 import pacote.config.ConfigStatus;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.faces.model.SelectItem;
+
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -236,5 +242,76 @@ public class EleicaoDB extends ConexaoMongo {
 			ex.printStackTrace();
 		}
 		return lista;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public EleicaoBean getEleicao(String id) {
+		EleicaoBean elemento = new EleicaoBean();
+		try {
+			ConexaoMongo conn = new ConexaoMongo();
+			MongoDatabase db = conn.getDb();
+			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_eleicao);
+			if(colection != null) {
+				MongoCursor<Document> cursor = colection.find(eq("_id", new ObjectId(id)) ).iterator();
+				while (cursor.hasNext()) {
+					Document doc = cursor.next();
+			        elemento.id = doc.get("_id").toString();
+			        elemento.nome = doc.get("nome", "").toString();
+			        elemento.descricao = doc.get("descricao", "").toString();
+			        elemento.status = doc.get("status", "0").toString();
+			        if(elemento.status.equals(ConfigStatus.ATIVO.valor())) {
+			        	elemento.statusDescricao = ConfigStatus.DESCRICAO_ATIVO.valor();
+					}else if(elemento.status.equals(ConfigStatus.INATIVO.valor())) {
+						elemento.statusDescricao = ConfigStatus.DESCRICAO_INATIVO.valor();
+					}
+			        
+			        elemento.dataInicio = doc.getDate("dt_inicio");
+			        elemento.dataFim = doc.getDate("dt_fim");
+			        
+			        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");     
+			        elemento.dataInicioDescricao = df.format(elemento.dataInicio);
+			        elemento.dataFimDescricao = df.format(elemento.dataFim);
+			        elemento.cargos = new ArrayList<CargoBean>();
+			        elemento.cargosSelected = (List<String>) doc.get("cargos");
+			        for(String it : elemento.getCargosSelected()) {
+			        	elemento.getCargos().add(new CargoDB().getCargo(it));
+			        }
+				}
+			}
+			return elemento;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			return  null;
+		}
+	}
+	
+	public boolean preencherVagaCandidato(CandidatoBean candidato, SelectItem vaga, EleicaoBean eleicao, CargoBean cargoSelecionado) {
+		try {
+			ConexaoMongo conn = new ConexaoMongo();
+			MongoDatabase db = conn.getDb();
+			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_eleicao);
+			if(colection != null) {
+				EleicaoBean dados_eleicao = this.getEleicao(eleicao.getId());
+				if(dados_eleicao != null) {
+					Document documento = new Document();
+					Document doc1 = new Document();
+					for(CargoBean c : dados_eleicao.getCargos()) {
+						if(c.getId().equals(cargoSelecionado.getId())) {
+							String[] lista_candidatos = new String[cargoSelecionado.quantidade];
+							lista_candidatos[(int) vaga.getValue()] = candidato.getId();
+							doc1.put(c.getId(), lista_candidatos);
+							
+						}
+					}
+					
+					documento.put("cargos_candidato", doc1);
+					colection.updateOne(eq("_id", new ObjectId(dados_eleicao.getId())), new Document("$set", documento));
+				}
+			}
+			return true;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
 	}
 }

@@ -24,6 +24,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection; 
 import pacote.dao.CargoDB;
 import pacote.dao.EleicaoDB;
+import pacote.bean.CandidatoBean;
 import pacote.bean.CargoBean;
 import pacote.bean.EleicaoBean;
 import javax.faces.model.SelectItem;
@@ -107,6 +108,21 @@ public class EleicaoCandidato extends BaseUsuarioLogado implements Serializable 
 				sl.setValue(x);
 				this.vagas.add(sl);
 			}
+		}
+	}
+	
+	public void preencherVaga(CandidatoBean candidato) {
+		try {
+			boolean retorno = false;
+			EleicaoDB db = new EleicaoDB();
+			retorno = db.preencherVagaCandidato(candidato, this.vagaSelecionada, this.selecionado, this.cargoSelecionado);
+			if(retorno == false) {
+				throw new Exception("Erro ao associar candidato");
+			}
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.FACES_MESSAGES, "Vaga preenchida com sucesso!"));
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", ex.getMessage()));			
 		}
 	}
 }
