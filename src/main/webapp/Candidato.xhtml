@@ -104,7 +104,7 @@
 					<p:inputText id="sobrenome" name="sobrenome" value="#{candidato.informacoes.sobrenome}" title="Sobrenome" required="true" requiredMessage="Campo Sobrenome deve ser digitado"></p:inputText>
 					
 					<h:outputLabel value="Data de Nascimento:" for="data_nasc"/>
-					<p:calendar title="Data de Nascimento" id="data_nasc" value="#{candidato.informacoes.dataNascimento}" mode="popup" required="true" requiredMessage="Campo Data de Nascimento deve ser preenchido" effect="fade"  />
+					<p:calendar title="Data de Nascimento" id="data_nasc" value="#{candidato.informacoes.dataNascimento}" mode="popup" required="true" requiredMessage="Campo Data de Nascimento deve ser preenchido" effect="fade" pattern="dd/MM/yyyy"  />
 					
 					<h:outputLabel value="Gênero:" for="genero"/>
 					<p:selectOneMenu id="genero" value="#{candidato.informacoes.genero}" name="genero" title="Gênero" required="true" requiredMessage="Campo Gênero deve ser selecionado"  >
