@@ -61,11 +61,16 @@ public class CandidatoBean implements Serializable {
 	}
 	
 	public void setGenero(String genero) {
-		if(genero.equals(ConfigStatus.MASCULINO.valor())) {
-			this.setGeneroDescricao(ConfigStatus.DESCRICAO_MASCULINO.valor());
-		}else if(genero.equals(ConfigStatus.FEMININO.valor())) {
-			this.setGeneroDescricao(ConfigStatus.DESCRICAO_FEMININO.valor());
+		if(genero == null) {
+			this.setGeneroDescricao("Não definido");
+		}else {
+			if(genero.equals(ConfigStatus.MASCULINO.valor())) {
+				this.setGeneroDescricao(ConfigStatus.DESCRICAO_MASCULINO.valor());
+			}else if(genero.equals(ConfigStatus.FEMININO.valor())) {
+				this.setGeneroDescricao(ConfigStatus.DESCRICAO_FEMININO.valor());
+			}
 		}
+		
 		this.genero = genero;
 	}
 	

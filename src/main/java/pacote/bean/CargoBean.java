@@ -1,6 +1,8 @@
 package pacote.bean;
 
 import java.io.Serializable;
+import java.util.List;
+
 import pacote.config.ConfigStatus;
 
 public class CargoBean implements Serializable {
@@ -14,6 +16,7 @@ public class CargoBean implements Serializable {
 	public String id;
 	public String statusDescricao;
 	public int quantidade;
+	public List<CandidatoBean> vagaCandidato;
 	
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -61,6 +64,14 @@ public class CargoBean implements Serializable {
 	
 	public int getQuantidade() {
 		return this.quantidade;
+	}
+	
+	public void setVagaCandidato(List<CandidatoBean> candidato) {
+		this.vagaCandidato = candidato;
+	}
+	
+	public List<CandidatoBean> getVagaCandidato(){
+		return this.vagaCandidato;
 	}
 	
 }

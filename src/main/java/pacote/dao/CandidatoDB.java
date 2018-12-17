@@ -87,4 +87,32 @@ public class CandidatoDB extends ConexaoMongo {
 		}
 		return lista;
 	}
+	
+	public CandidatoBean getCandidato(String id) {
+		CandidatoBean c = null;
+		try {
+			ConexaoMongo conn = new ConexaoMongo();
+			MongoDatabase db = conn.getDb();
+			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_candidato);
+			if(colection != null) {
+				MongoCursor<Document> cursor = colection.find(eq("_id", new ObjectId(id))).iterator();
+				while (cursor.hasNext()) {
+			    	CandidatoBean elemento = new CandidatoBean();
+			        Document doc = cursor.next();
+			        elemento.id = doc.get("_id").toString();
+			        elemento.nome = doc.get("nome", "").toString();
+			        elemento.sobrenome = doc.get("sobrenome", "").toString();
+			        elemento.dataNascimento = doc.getDate("dt_nascimento");
+			        elemento.setGenero(doc.getString("genero"));
+			        elemento.cpf = doc.getString("cpf");
+			        c = elemento;
+			        break;
+			        
+			    }
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return c;
+	}
 }

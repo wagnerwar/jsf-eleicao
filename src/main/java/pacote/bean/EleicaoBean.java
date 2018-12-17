@@ -19,6 +19,7 @@ public class EleicaoBean implements Serializable{
 	public String dataFimDescricao;
 	public List<String> cargosSelected;
 	
+	
 	public void setNome(String nome) {
 		this.nome = nome;
 	}

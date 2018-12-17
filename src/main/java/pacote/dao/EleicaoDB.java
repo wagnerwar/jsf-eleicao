@@ -229,6 +229,29 @@ public class EleicaoDB extends ConexaoMongo {
 				        	exx.printStackTrace();
 				        }
 				        
+				        Document doc1 = null;
+				        if(doc.get("cargos_candidato") instanceof Document) {
+				        	doc1 = (Document) doc.get("cargos_candidato");
+				        }
+				        
+				        if(doc1 != null) {
+				        	for(CargoBean c: elemento.getCargos()) {
+				        		List<String> lista_candidatos_cargo = (List<String>) doc1.get(c.getId());
+				        		if(lista_candidatos_cargo != null) {
+				        			List<CandidatoBean> lista_gerada_candidato = new ArrayList<CandidatoBean>();
+				        			
+					        		for(String candidato_cargo: lista_candidatos_cargo) {
+					        			if(candidato_cargo != null) {
+					        				CandidatoBean ca = new CandidatoDB().getCandidato(candidato_cargo);
+						        			lista_gerada_candidato.add(ca);
+					        			}
+					        		}
+					        		c.setVagaCandidato(lista_gerada_candidato);
+				        		}
+				        		//elemento.setVagas(lista_candidatos_cargo);
+				        	}
+				        }
+				        
 				        lista.add(elemento);
 				    }
 				} catch(Exception exx){
@@ -243,6 +266,7 @@ public class EleicaoDB extends ConexaoMongo {
 		}
 		return lista;
 	}
+	
 	
 	@SuppressWarnings("unchecked")
 	public EleicaoBean getEleicao(String id) {
@@ -276,9 +300,52 @@ public class EleicaoDB extends ConexaoMongo {
 			        for(String it : elemento.getCargosSelected()) {
 			        	elemento.getCargos().add(new CargoDB().getCargo(it));
 			        }
+			        Document doc1 = null;
+			        if(doc.get("cargos_candidato") instanceof Document) {
+			        	doc1 = (Document) doc.get("cargos_candidato");
+			        }
+			        
+			        if(doc1 != null) {
+			        	for(CargoBean c: elemento.getCargos()) {
+			        		List<String> lista_candidatos_cargo = (List<String>) doc1.get(c.getId());
+			        		List<CandidatoBean> lista_gerada_candidato = new ArrayList<CandidatoBean>();
+			        		if(lista_candidatos_cargo != null) {
+			        			for(String candidato_cargo: lista_candidatos_cargo) {
+				        			CandidatoBean ca = new CandidatoDB().getCandidato(candidato_cargo);
+				        			lista_gerada_candidato.add(ca);
+				        		}
+				        		c.setVagaCandidato(lista_gerada_candidato);
+			        		}
+			        	}
+			        }
 				}
 			}
 			return elemento;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			return  null;
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public  Object getGambi(String id) {
+		Document doc1 = null;
+		try {
+			ConexaoMongo conn = new ConexaoMongo();
+			MongoDatabase db = conn.getDb();
+			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_eleicao);
+			if(colection != null) {
+				MongoCursor<Document> cursor = colection.find(eq("_id", new ObjectId(id)) ).iterator();
+				while (cursor.hasNext()) {
+					Document doc = cursor.next();
+			     
+			        
+			        if(doc.get("cargos_candidato") instanceof Document) {
+			        	doc1 = (Document) doc.get("cargos_candidato");
+			        }
+			    }
+			}
+			return doc1;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 			return  null;
@@ -294,13 +361,19 @@ public class EleicaoDB extends ConexaoMongo {
 				EleicaoBean dados_eleicao = this.getEleicao(eleicao.getId());
 				if(dados_eleicao != null) {
 					Document documento = new Document();
-					Document doc1 = new Document();
+					Document doc1 = (Document) this.getGambi(eleicao.getId());
+					
 					for(CargoBean c : dados_eleicao.getCargos()) {
 						if(c.getId().equals(cargoSelecionado.getId())) {
-							String[] lista_candidatos = new String[cargoSelecionado.quantidade];
-							lista_candidatos[(int) vaga.getValue()] = candidato.getId();
-							doc1.put(c.getId(), lista_candidatos);
+							ArrayList<String> lista_candidatos = new ArrayList<String>();
+							for(int x = 0; x < cargoSelecionado.getQuantidade(); x++) {
+								lista_candidatos.add(x, null);
+							}
 							
+							lista_candidatos.set((Integer) vaga.getValue(), candidato.getId());
+							
+							doc1.put(c.getId(), lista_candidatos);
+							break;
 						}
 					}
 					

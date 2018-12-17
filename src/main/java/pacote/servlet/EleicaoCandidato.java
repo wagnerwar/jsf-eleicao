@@ -104,8 +104,19 @@ public class EleicaoCandidato extends BaseUsuarioLogado implements Serializable 
 			SelectItem sl = null;
 			for(x = 0; x < this.getCargoSelecionado().quantidade; x++) {
 				sl = new SelectItem();
+				if(this.getCargoSelecionado().vagaCandidato != null) {
+					try {
+						if(this.getCargoSelecionado().vagaCandidato.get(x) != null) {
+							sl.setLabel(this.getCargoSelecionado().vagaCandidato.get(x).getNome());
+							sl.setValue(this.getCargoSelecionado().vagaCandidato.get(x).getId());
+						}
+					}catch(Exception ex) {
+						sl.setLabel(null);
+						sl.setValue(null);
+					}
+				}
 				//sl.setLabel("TESTE");
-				sl.setValue(x);
+				//sl.setValue(x);
 				this.vagas.add(sl);
 			}
 		}
