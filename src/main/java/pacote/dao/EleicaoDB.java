@@ -237,18 +237,18 @@ public class EleicaoDB extends ConexaoMongo {
 				        if(doc1 != null) {
 				        	for(CargoBean c: elemento.getCargos()) {
 				        		List<String> lista_candidatos_cargo = (List<String>) doc1.get(c.getId());
+				        		List<CandidatoBean> lista_gerada_candidato = new ArrayList<CandidatoBean>();
 				        		if(lista_candidatos_cargo != null) {
-				        			List<CandidatoBean> lista_gerada_candidato = new ArrayList<CandidatoBean>();
-				        			
-					        		for(String candidato_cargo: lista_candidatos_cargo) {
-					        			if(candidato_cargo != null) {
-					        				CandidatoBean ca = new CandidatoDB().getCandidato(candidato_cargo);
+				        			for(String candidato_cargo: lista_candidatos_cargo) {
+				        				if(candidato_cargo != null) {
+				        					CandidatoBean ca = new CandidatoDB().getCandidato(candidato_cargo);
 						        			lista_gerada_candidato.add(ca);
-					        			}
+				        				}else {
+				        					lista_gerada_candidato.add(null);
+				        				}
 					        		}
 					        		c.setVagaCandidato(lista_gerada_candidato);
 				        		}
-				        		//elemento.setVagas(lista_candidatos_cargo);
 				        	}
 				        }
 				        
@@ -311,8 +311,12 @@ public class EleicaoDB extends ConexaoMongo {
 			        		List<CandidatoBean> lista_gerada_candidato = new ArrayList<CandidatoBean>();
 			        		if(lista_candidatos_cargo != null) {
 			        			for(String candidato_cargo: lista_candidatos_cargo) {
-				        			CandidatoBean ca = new CandidatoDB().getCandidato(candidato_cargo);
-				        			lista_gerada_candidato.add(ca);
+			        				if(candidato_cargo != null) {
+			        					CandidatoBean ca = new CandidatoDB().getCandidato(candidato_cargo);
+					        			lista_gerada_candidato.add(ca);
+			        				}else {
+			        					lista_gerada_candidato.add(null);
+			        				}
 				        		}
 				        		c.setVagaCandidato(lista_gerada_candidato);
 			        		}
@@ -326,6 +330,81 @@ public class EleicaoDB extends ConexaoMongo {
 			return  null;
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public boolean excluirCandidatoEleicao(String id_candidato) {
+		boolean retorno = false;
+		EleicaoBean elemento = new EleicaoBean();
+		try {
+			ConexaoMongo conn = new ConexaoMongo();
+			MongoDatabase db = conn.getDb();
+			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_eleicao);
+			if(colection != null) {
+				MongoCursor<Document> cursor = colection.find().iterator();
+				while (cursor.hasNext()) {
+					Document doc = cursor.next();
+			        elemento.id = doc.get("_id").toString();
+			        elemento.nome = doc.get("nome", "").toString();
+			        elemento.descricao = doc.get("descricao", "").toString();
+			        elemento.status = doc.get("status", "0").toString();
+			        if(elemento.status.equals(ConfigStatus.ATIVO.valor())) {
+			        	elemento.statusDescricao = ConfigStatus.DESCRICAO_ATIVO.valor();
+					}else if(elemento.status.equals(ConfigStatus.INATIVO.valor())) {
+						elemento.statusDescricao = ConfigStatus.DESCRICAO_INATIVO.valor();
+					}
+			        
+			        elemento.dataInicio = doc.getDate("dt_inicio");
+			        elemento.dataFim = doc.getDate("dt_fim");
+			        
+			        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");     
+			        elemento.dataInicioDescricao = df.format(elemento.dataInicio);
+			        elemento.dataFimDescricao = df.format(elemento.dataFim);
+			        elemento.cargos = new ArrayList<CargoBean>();
+			        elemento.cargosSelected = (List<String>) doc.get("cargos");
+			        for(String it : elemento.getCargosSelected()) {
+			        	elemento.getCargos().add(new CargoDB().getCargo(it));
+			        }
+			        Document doc1 = null;
+			        if(doc.get("cargos_candidato") instanceof Document) {
+			        	doc1 = (Document) doc.get("cargos_candidato");
+			        }
+			        
+			        if(doc1 != null) {
+			        	for(CargoBean c: elemento.getCargos()) {
+			        		List<String> lista_candidatos_cargo = (List<String>) doc1.get(c.getId());
+			        		List<CandidatoBean> lista_gerada_candidato = new ArrayList<CandidatoBean>();
+			        		if(lista_candidatos_cargo != null) {
+			        			int i = 0;
+			        			int indice_candidato = 0;
+			        			for(String candidato_cargo: lista_candidatos_cargo) {
+			        				if(candidato_cargo != null) {
+			        					if(candidato_cargo.equals(id_candidato)) {
+			        						indice_candidato = i;
+			        					}	
+			        					CandidatoBean ca = new CandidatoDB().getCandidato(candidato_cargo);
+						        		lista_gerada_candidato.add(ca);
+			        				}else {
+			        					lista_gerada_candidato.add(null);
+			        				}
+			        				i++;
+				        		}
+			        			lista_gerada_candidato.set(indice_candidato, null);
+			        			
+				        		c.setVagaCandidato(lista_gerada_candidato);
+				        		doc1.put(c.getId(), lista_gerada_candidato);
+			        		}
+			        	}
+			        }
+				}
+			}
+			//return elemento;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			//return  null;
+		}
+		return retorno;
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	public  Object getGambi(String id) {
@@ -365,9 +444,22 @@ public class EleicaoDB extends ConexaoMongo {
 					
 					for(CargoBean c : dados_eleicao.getCargos()) {
 						if(c.getId().equals(cargoSelecionado.getId())) {
+							int x = 0;
 							ArrayList<String> lista_candidatos = new ArrayList<String>();
-							for(int x = 0; x < cargoSelecionado.getQuantidade(); x++) {
-								lista_candidatos.add(x, null);
+							if(cargoSelecionado.getVagaCandidato() != null) {
+								for(CandidatoBean ce: cargoSelecionado.getVagaCandidato()) {
+									if(ce != null) {
+										lista_candidatos.add(x, ce.getId());
+									}else {
+										lista_candidatos.add(x, null);
+									}
+									x++;
+								}
+							
+							}else {
+								for(x = 0; x < cargoSelecionado.getQuantidade(); x++) {
+									lista_candidatos.add(x, null);
+								}
 							}
 							
 							lista_candidatos.set((Integer) vaga.getValue(), candidato.getId());

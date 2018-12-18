@@ -56,6 +56,9 @@
  					</ui:repeat>
     			</div>
     		</h:form>
+    		<h:panelGrid columns="2" style="width:100%" >
+    					<p:commandButton  value="Candidatos" icon="ui-icon-plus" oncomplete="PF('listagem_candidatos').show()"  action="#{candidato.listarCandidatos()}" update="frmListagemGeralCandidato" ajax="true" />		
+    		</h:panelGrid>
     	</p:outputPanel>
     </p:dialog>
     
@@ -73,9 +76,7 @@
 		 					</p:commandButton>
                     	</h:panelGrid>        				
     				</ui:repeat>
-    				<h:panelGrid columns="2" style="width:100%" >
-    					<p:commandButton  value="Candidatos" icon="ui-icon-plus" oncomplete="PF('candidatos').show()"  action="#{candidato.inicializar()}" update="formCandidato" ajax="true" />		
-    				</h:panelGrid>
+    				
     			</div>
     		</h:form>
     	</p:outputPanel>
@@ -114,7 +115,7 @@
 					
 					 
 					<f:facet name="footer">
-						<p:commandButton  value="incluir" icon="ui-icon-save"  action="#{candidato.incluir}" update="formCandidato" ajax="true" />
+						<p:commandButton  value="incluir" icon="ui-icon-save"  action="#{candidato.incluir}" update="formCandidato, frmListagemGeralCandidato" ajax="true" />
 						<p:commandButton  value="Limpar" icon="ui-icon-trash" process="@this" update="formCandidato" ajax="true" immediate="true" >
 							<p:resetInput target="formCandidato" />
 						</p:commandButton>
@@ -125,7 +126,7 @@
     	</p:outputPanel>
     </p:dialog>
     <!-- candidatos_vaga -->
-    <p:dialog  header="Seleção de candidatos para a vaga" widgetVar="candidatos_vaga"  showEffect="fade" hideEffect="fade">
+    <p:dialog  header="Seleção de candidatos para a vaga" widgetVar="candidatos_vaga"  showEffect="fade" hideEffect="fade" width="500" height="600" responsive="true">
     	<p:outputPanel id="pnlVagaCandidato" name="pnlVagaCandidato" style="text-align:center;">
     		<h:form id="frmListagemCandidato" name="frmListagemCandidato" enctype="multipart/form-data">
     			<p:messages id="messages_vaga" showDetail="true" closable="true"></p:messages>
@@ -149,19 +150,50 @@
 				    <p:column headerText="Cpf">
 				    	<h:outputText value="#{c.cpf}" />
 				    </p:column>
-				    <p:column headerText="Data de Nascimento">
-				        <h:outputText value="#{c.dataNascimento}" />
-				    </p:column>
-				    <p:column headerText="Gênero">
-				        <h:outputText value="#{c.generoDescricao}" />
-				    </p:column>
-				    
 				</p:dataTable>
 				</h:panelGrid>
     		</h:form>
     	</p:outputPanel>
     	
     </p:dialog>
+    
+    <!-- Listagem geral de candidatos -->
+    <!-- candidatos_vaga -->
+    <p:dialog  header="Listagem geral de candidatos" widgetVar="listagem_candidatos"  showEffect="fade" hideEffect="fade" width="500" height="300" responsive="true">
+    	<p:outputPanel id="pnlListagemGeralCandidato" name="pnlListagemGeralCandidato" style="text-align:center;">
+    		<h:form id="frmListagemGeralCandidato" name="frmListagemGeralCandidato" enctype="multipart/form-data">
+    			<p:messages id="messages_listagem_geral_candidato" showDetail="true" closable="true"></p:messages>
+    			<h:panelGrid columns="6" cellpadding="5" id="tblGeralCandidatos">
+    				<f:facet name="header">
+					<h1>
+						<h:outputText value ="Manutenção de candidatos"  />
+					</h1>
+				</f:facet>
+				<p:dataTable var="c" value="#{candidato.candidatos}">
+				    <p:column headerText="Nome">
+				        <h:outputText value="#{c.nome}" />
+				    </p:column>
+				    <p:column headerText="Sobrenome">
+				        <h:outputText value="#{c.sobrenome}" />
+				    </p:column>
+				    <p:column headerText="Cpf">
+				    	<h:outputText value="#{c.cpf}" />
+				    </p:column>
+				    <p:column headerText="Ações">
+						
+						<p:commandButton  icon="ui-icon-trash" action="#{candidato.excluir(c)}" update="frmListagemGeralCandidato" ajax="true"></p:commandButton> 	
+				    
+				    </p:column>
+				</p:dataTable>
+				<f:facet name="footer">
+					<p:commandButton  value="Adicionar" icon="ui-icon-plus" oncomplete="PF('candidatos').show()"  action="#{candidato.inicializar()}" update="formCandidato" ajax="true" />
+				</f:facet>
+				</h:panelGrid>
+    		</h:form>
+    	</p:outputPanel>
+    	
+    </p:dialog>
+    
     
     <script type="text/javascript">
     PrimeFaces.locales['de'] = {

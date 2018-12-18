@@ -110,14 +110,18 @@ public class EleicaoCandidato extends BaseUsuarioLogado implements Serializable 
 							sl.setLabel(this.getCargoSelecionado().vagaCandidato.get(x).getNome());
 							sl.setValue(x);
 							//sl.setValue(this.getCargoSelecionado().vagaCandidato.get(x).getId());
+						}else {
+							sl.setLabel(null);
+							sl.setValue(x);
 						}
 					}catch(Exception ex) {
 						sl.setLabel(null);
 						sl.setValue(x);
 					}
+				}else {
+					sl.setLabel(null);
+					sl.setValue(x);
 				}
-				//sl.setLabel("TESTE");
-				//sl.setValue(x);
 				this.vagas.add(sl);
 			}
 		}

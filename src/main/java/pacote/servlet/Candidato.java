@@ -51,6 +51,19 @@ public class Candidato extends BaseUsuarioLogado implements Serializable {
 		this.informacoes = informacoes;
 	}
 	
+	public void excluir(CandidatoBean candidato) {
+		try {
+			CandidatoDB db = new CandidatoDB();
+			EleicaoDB dbe = new EleicaoDB();
+			boolean ret = dbe.excluirCandidatoEleicao(candidato.getId());
+			
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.FACES_MESSAGES, "Exclusão feita com sucesso"));
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", ex.getMessage()));
+		}
+	}
+	
 	public void incluir() {
 		try {
 			
@@ -66,6 +79,7 @@ public class Candidato extends BaseUsuarioLogado implements Serializable {
 			}
 			
 			if(db.cadastrar(this.informacoes)) {
+				this.listarCandidatos();
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.FACES_MESSAGES, "Sucesso ao incluir registro"));
 				
 			}else {

@@ -115,4 +115,20 @@ public class CandidatoDB extends ConexaoMongo {
 		}
 		return c;
 	}
+	
+	public boolean excluirCandidato(String id) {
+		boolean c = false;
+		try {
+			ConexaoMongo conn = new ConexaoMongo();
+			MongoDatabase db = conn.getDb();
+			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_candidato);
+			if(colection != null) {
+				
+				colection.deleteOne(eq("_id", new ObjectId(id)));
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return c;
+	}
 }
