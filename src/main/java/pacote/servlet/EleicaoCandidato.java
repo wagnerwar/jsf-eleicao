@@ -108,11 +108,12 @@ public class EleicaoCandidato extends BaseUsuarioLogado implements Serializable 
 					try {
 						if(this.getCargoSelecionado().vagaCandidato.get(x) != null) {
 							sl.setLabel(this.getCargoSelecionado().vagaCandidato.get(x).getNome());
-							sl.setValue(this.getCargoSelecionado().vagaCandidato.get(x).getId());
+							sl.setValue(x);
+							//sl.setValue(this.getCargoSelecionado().vagaCandidato.get(x).getId());
 						}
 					}catch(Exception ex) {
 						sl.setLabel(null);
-						sl.setValue(null);
+						sl.setValue(x);
 					}
 				}
 				//sl.setLabel("TESTE");
@@ -129,8 +130,10 @@ public class EleicaoCandidato extends BaseUsuarioLogado implements Serializable 
 			retorno = db.preencherVagaCandidato(candidato, this.vagaSelecionada, this.selecionado, this.cargoSelecionado);
 			if(retorno == false) {
 				throw new Exception("Erro ao associar candidato");
+			}else {
+				this.init();
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.FACES_MESSAGES, "Vaga preenchida com sucesso!"));
 			}
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.FACES_MESSAGES, "Vaga preenchida com sucesso!"));
 		}catch(Exception ex) {
 			ex.printStackTrace();
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", ex.getMessage()));			

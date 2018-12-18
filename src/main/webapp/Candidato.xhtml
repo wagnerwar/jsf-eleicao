@@ -98,16 +98,16 @@
 					</p:inputMask>
 					
 					<h:outputLabel value="Nome:" for="nome"/>
-					<p:inputText id="nome" name="nome" value="#{candidato.informacoes.nome}" title="Nome" required="true" requiredMessage="Campo Nome deve ser digitado"></p:inputText>
+					<p:inputText id="nome"  value="#{candidato.informacoes.nome}" title="Nome" required="true" label="Nome" ></p:inputText>
 					
 					<h:outputLabel value="Sobrenome:" for="sobrenome"/>
-					<p:inputText id="sobrenome" name="sobrenome" value="#{candidato.informacoes.sobrenome}" title="Sobrenome" required="true" requiredMessage="Campo Sobrenome deve ser digitado"></p:inputText>
+					<p:inputText label="Sobrenome" id="sobrenome" name="sobrenome" value="#{candidato.informacoes.sobrenome}" title="Sobrenome" required="true" requiredMessage="Campo Sobrenome deve ser digitado"></p:inputText>
 					
 					<h:outputLabel value="Data de Nascimento:" for="data_nasc"/>
-					<p:calendar title="Data de Nascimento" id="data_nasc" value="#{candidato.informacoes.dataNascimento}" mode="popup" required="true" requiredMessage="Campo Data de Nascimento deve ser preenchido" effect="fade" pattern="dd/MM/yyyy"  />
+					<p:calendar  label="Data de Nascimento" title="Data de Nascimento" id="data_nasc" value="#{candidato.informacoes.dataNascimento}" mode="popup" required="true" requiredMessage="Campo Data de Nascimento deve ser preenchido" effect="fade" pattern="dd/MM/yyyy" locale="de"  />
 					
 					<h:outputLabel value="Gênero:" for="genero"/>
-					<p:selectOneMenu id="genero" value="#{candidato.informacoes.genero}" name="genero" title="Gênero" required="true" requiredMessage="Campo Gênero deve ser selecionado"  >
+					<p:selectOneMenu label="Gênero" id="genero" value="#{candidato.informacoes.genero}" name="genero" title="Gênero" required="true" requiredMessage="Campo Gênero deve ser selecionado"  >
 						<f:selectItem itemLabel="Selecione" itemValue="" />
 						<f:selectItems value="#{candidato.generos}" />
 					</p:selectOneMenu>
@@ -137,7 +137,7 @@
 				</f:facet>
 				<p:dataTable var="c" value="#{candidato.candidatos}">
 					<p:column headerText="Ações">
-				   		<p:commandButton update="formVaga" action="#{eleicaoCandidato.preencherVaga(c)}" oncomplete="PF('candidatos_vaga').hide()" icon="ui-icon ui-icon-plus" title="Preencher Vaga" value="Preencher Vaga">	    				
+				   		<p:commandButton update="formVaga, formCandidato, formCargo, frmListagem" action="#{eleicaoCandidato.preencherVaga(c)}" oncomplete="PF('candidatos_vaga').hide(); PF('vagas').hide(); PF('cargos').hide()" icon="ui-icon ui-icon-plus" title="Preencher Vaga" value="Preencher Vaga">	    				
             			</p:commandButton>
 				    </p:column>
 				    <p:column headerText="Nome">
@@ -162,6 +162,35 @@
     	</p:outputPanel>
     	
     </p:dialog>
+    
+    <script type="text/javascript">
+    PrimeFaces.locales['de'] = {
+            closeText: 'Fechar',
+            prevText: 'Anterior',
+            nextText: 'Próximo',
+            monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Mai', 'Junho', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+            monthNamesShort: ['Jan', 'Feb', 'März', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+            dayNames: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+            dayNamesShort: ['Son', 'Mon', 'Die', 'Mit', 'Don', 'Fre', 'Sam'],
+            dayNamesMin: ['S', 'M', 'D', 'M ', 'D', 'F ', 'S'],
+            weekHeader: 'Woche',
+            FirstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: '',
+            timeOnlyTitle: 'Nur Zeit',
+            timeText: 'Zeit',
+            hourText: 'Stunde',
+            minuteText: 'Minute',
+            secondText: 'Sekunde',
+            currentText: 'Aktuelles Datum',
+            ampm: false,
+            month: 'Monat',
+            week: 'Woche',
+            day: 'Tag',
+            allDayText: 'Ganzer Tag'
+        };
+    </script>
   </ui:define>
 </ui:composition>
 </body>
