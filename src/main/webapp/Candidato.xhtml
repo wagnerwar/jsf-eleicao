@@ -159,7 +159,7 @@
     
     <!-- Listagem geral de candidatos -->
     <!-- candidatos_vaga -->
-    <p:dialog  header="Listagem geral de candidatos" widgetVar="listagem_candidatos"  showEffect="fade" hideEffect="fade" width="500" height="300" responsive="true">
+    <p:dialog  header="Listagem geral de candidatos" widgetVar="listagem_candidatos"  showEffect="fade" hideEffect="fade" width="600" height="300" responsive="true">
     	<p:outputPanel id="pnlListagemGeralCandidato" name="pnlListagemGeralCandidato" style="text-align:center;">
     		<h:form id="frmListagemGeralCandidato" name="frmListagemGeralCandidato" enctype="multipart/form-data">
     			<p:messages id="messages_listagem_geral_candidato" showDetail="true" closable="true"></p:messages>
@@ -182,7 +182,7 @@
 				    <p:column headerText="Ações">
 						
 						<p:commandButton  icon="ui-icon-trash" action="#{candidato.excluir(c)}" update="frmListagemGeralCandidato" ajax="true"></p:commandButton> 	
-				    
+				    	<p:commandButton  icon="ui-icon-pencil" action="#{candidato.editar(c)}" update="formCandidato" ajax="true" oncomplete="PF('candidatos').show()"></p:commandButton>
 				    </p:column>
 				</p:dataTable>
 				<f:facet name="footer">

@@ -56,7 +56,16 @@ public class Candidato extends BaseUsuarioLogado implements Serializable {
 			CandidatoDB db = new CandidatoDB();
 			EleicaoDB dbe = new EleicaoDB();
 			boolean ret = dbe.excluirCandidatoEleicao(candidato.getId());
-			
+			if(ret == true) {
+				boolean ret1 = db.excluirCandidato(candidato.getId());
+				//boolean ret1 = true; 
+				if(ret1 == false) {
+					throw new Exception("Erro ao excluir candidato da base");
+				}
+			}else {
+				throw new Exception("Erro ao exclusão candidato das eleições");
+			}
+			this.listarCandidatos();
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.FACES_MESSAGES, "Exclusão feita com sucesso"));
 		}catch(Exception ex) {
 			ex.printStackTrace();
@@ -74,17 +83,26 @@ public class Candidato extends BaseUsuarioLogado implements Serializable {
 				throw new Exception("Data de início deve ser maior que a data de hoje");
 			}
 			
-			if(!db.checarDuplicidadeCPF(this.getInformacoes())) {
-				throw new Exception("CPF já cadastrado");
-			}
-			
-			if(db.cadastrar(this.informacoes)) {
-				this.listarCandidatos();
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.FACES_MESSAGES, "Sucesso ao incluir registro"));
-				
+			if(this.getInformacoes().getId() != null) {
+				if(db.atualizar(this.informacoes)) {
+					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.FACES_MESSAGES, "Sucesso ao atualizar registro"));
+				}else {
+					throw new Exception("Erro ao atualizar registro");
+				}
 			}else {
-				throw new Exception("Erro ao incluir candidato");
+				
+				if(!db.checarDuplicidadeCPF(this.getInformacoes())) {
+					throw new Exception("CPF já cadastrado");
+				}
+				if(db.cadastrar(this.informacoes)) {
+					this.listarCandidatos();
+					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.FACES_MESSAGES, "Sucesso ao incluir registro"));
+					
+				}else {
+					throw new Exception("Erro ao incluir candidato");
+				}
 			}
+			this.listarCandidatos();
 			/*System.out.println(this.getFile());
 			if(this.getFile() != null) {				
 				throw new Exception("Arquivo subido: " + this.getFile().getFileName() );
@@ -140,8 +158,20 @@ public class Candidato extends BaseUsuarioLogado implements Serializable {
 		this.informacoes.setSobrenome(null);
 		this.informacoes.setGenero(null);
 		this.informacoes.setDataNascimento(null);
+		this.informacoes.setId(null);
 		this.definirGeneros();
 		//RequestContext.getCurrentInstance().reslet("frmCandidato");
+	}
+	
+	public void editar(CandidatoBean c) {
+		this.informacoes = new CandidatoBean();
+		this.informacoes.setCpf(c.getCpf());
+		this.informacoes.setNome(c.getNome());
+		this.informacoes.setSobrenome(c.getSobrenome());
+		this.informacoes.setGenero(c.getGenero());
+		this.informacoes.setDataNascimento(c.getDataNascimento());
+		this.informacoes.setId(c.getId());
+		this.definirGeneros();
 	}
 
 	public List<CandidatoBean> getCandidatos() {

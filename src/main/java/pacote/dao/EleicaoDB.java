@@ -343,28 +343,14 @@ public class EleicaoDB extends ConexaoMongo {
 				MongoCursor<Document> cursor = colection.find().iterator();
 				while (cursor.hasNext()) {
 					Document doc = cursor.next();
-			        elemento.id = doc.get("_id").toString();
-			        elemento.nome = doc.get("nome", "").toString();
-			        elemento.descricao = doc.get("descricao", "").toString();
-			        elemento.status = doc.get("status", "0").toString();
-			        if(elemento.status.equals(ConfigStatus.ATIVO.valor())) {
-			        	elemento.statusDescricao = ConfigStatus.DESCRICAO_ATIVO.valor();
-					}else if(elemento.status.equals(ConfigStatus.INATIVO.valor())) {
-						elemento.statusDescricao = ConfigStatus.DESCRICAO_INATIVO.valor();
-					}
-			        
-			        elemento.dataInicio = doc.getDate("dt_inicio");
-			        elemento.dataFim = doc.getDate("dt_fim");
-			        
-			        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");     
-			        elemento.dataInicioDescricao = df.format(elemento.dataInicio);
-			        elemento.dataFimDescricao = df.format(elemento.dataFim);
+					elemento.id = doc.get("_id").toString();
 			        elemento.cargos = new ArrayList<CargoBean>();
 			        elemento.cargosSelected = (List<String>) doc.get("cargos");
 			        for(String it : elemento.getCargosSelected()) {
 			        	elemento.getCargos().add(new CargoDB().getCargo(it));
 			        }
 			        Document doc1 = null;
+			        Document documento = new Document();
 			        if(doc.get("cargos_candidato") instanceof Document) {
 			        	doc1 = (Document) doc.get("cargos_candidato");
 			        }
@@ -372,31 +358,36 @@ public class EleicaoDB extends ConexaoMongo {
 			        if(doc1 != null) {
 			        	for(CargoBean c: elemento.getCargos()) {
 			        		List<String> lista_candidatos_cargo = (List<String>) doc1.get(c.getId());
-			        		List<CandidatoBean> lista_gerada_candidato = new ArrayList<CandidatoBean>();
+			        		List<String> lista_gerada_candidato = new ArrayList<String>();
 			        		if(lista_candidatos_cargo != null) {
 			        			int i = 0;
-			        			int indice_candidato = 0;
+			        			int indice_candidato = -1;
 			        			for(String candidato_cargo: lista_candidatos_cargo) {
 			        				if(candidato_cargo != null) {
 			        					if(candidato_cargo.equals(id_candidato)) {
 			        						indice_candidato = i;
 			        					}	
 			        					CandidatoBean ca = new CandidatoDB().getCandidato(candidato_cargo);
-						        		lista_gerada_candidato.add(ca);
+						        		lista_gerada_candidato.add(ca.getId());
 			        				}else {
 			        					lista_gerada_candidato.add(null);
 			        				}
 			        				i++;
 				        		}
-			        			lista_gerada_candidato.set(indice_candidato, null);
+			        			if(indice_candidato != -1) {
+			        				lista_gerada_candidato.set(indice_candidato, null);
+			        			}
 			        			
-				        		c.setVagaCandidato(lista_gerada_candidato);
+				        		//c.setVagaCandidato(lista_gerada_candidato);
 				        		doc1.put(c.getId(), lista_gerada_candidato);
 			        		}
 			        	}
+			        	documento.put("cargos_candidato", doc1);
+						colection.updateOne(eq("_id", new ObjectId(elemento.getId())), new Document("$set", documento));
 			        }
 				}
 			}
+			retorno = true;
 			//return elemento;
 		}catch(Exception ex) {
 			ex.printStackTrace();

@@ -42,13 +42,43 @@ public class CandidatoDB extends ConexaoMongo {
 		}
 	}
 	
-	public boolean checarDuplicidadeCPF(CandidatoBean campos) {
+	public boolean atualizar(CandidatoBean campos) {
 		try {
 			ConexaoMongo conn = new ConexaoMongo();
 			MongoDatabase db = conn.getDb();
 			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_candidato);
 			if(colection != null) {
-				MongoCursor<Document> cursor = colection.find(eq("cpf", campos.getCpf())).iterator();
+				Document documento = new Document();
+				documento.put("nome", campos.getNome() );
+				documento.put("sobrenome", campos.getSobrenome() );
+				documento.put("dt_nascimento", campos.dataNascimento );
+				documento.put("genero", campos.getGenero() );
+				documento.put("dt_criacao", new Date());
+				documento.put("cpf", campos.getCpf());				
+				//colection.insertOne(documento);
+				colection.updateOne(eq("_id", new ObjectId(campos.getId())), new Document("$set", documento));
+			}
+			return true;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+	
+	
+	public boolean checarDuplicidadeCPF(CandidatoBean campos) {
+		try {
+			ConexaoMongo conn = new ConexaoMongo();
+			MongoDatabase db = conn.getDb();
+			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_candidato);
+			MongoCursor<Document> cursor  = null;
+			if(colection != null) {
+				if(campos.getId() != null) {
+					cursor = colection.find(and(eq("cpf", campos.getCpf()), ne("_id", new ObjectId(campos.getId()) ) )).iterator();
+				}else {
+					cursor = colection.find(eq("cpf", campos.getCpf()) ).iterator();
+				}
+				
 				while (cursor.hasNext()) {
 					return false;
 				}
@@ -123,8 +153,8 @@ public class CandidatoDB extends ConexaoMongo {
 			MongoDatabase db = conn.getDb();
 			MongoCollection<Document> colection = conn.getColecao(ConexaoMongo.cl_candidato);
 			if(colection != null) {
-				
 				colection.deleteOne(eq("_id", new ObjectId(id)));
+				c = true;
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
