@@ -6,6 +6,8 @@ import pacote.bean.CandidatoBean;
 import pacote.bean.CargoBean;
 import pacote.bean.EleicaoBean;
 import pacote.config.ConfigStatus;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -160,5 +162,21 @@ public class CandidatoDB extends ConexaoMongo {
 			ex.printStackTrace();
 		}
 		return c;
+	}
+	
+	public boolean subirFoto(File file, CandidatoBean candidato, String extensao) {
+		boolean retorno = false;
+		try {
+			ConexaoMongo conn = new ConexaoMongo();
+			MongoDatabase db = conn.getDb();
+			FileManagerMongo fdb = new FileManagerMongo(db);
+			retorno = fdb.salvarFotoCandidato(file, candidato, extensao);
+			if(retorno == false) {
+				throw new Exception("Erro ao salvar arquivo");
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return retorno;
 	}
 }

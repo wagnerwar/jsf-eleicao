@@ -10,7 +10,7 @@ public class ConexaoMongo {
 	public static String cl_cargo = "cargo";
 	public static String cl_eleicao = "eleicao";
 	public static String cl_candidato = "candidato";
-	
+
 	public MongoClient getConexao() {
 		MongoClient mongo = new MongoClient( "localhost" , 27017 );
 		return mongo;
@@ -20,6 +20,7 @@ public class ConexaoMongo {
 		MongoClient conn = this.getConexao();
 		return conn.getDatabase(ConexaoMongo.db);
 	}
+	
 	
 	public MongoCollection<Document> getColecao(String colecao) {
 		
@@ -35,5 +36,6 @@ public class ConexaoMongo {
 		}else {
 			return lista;
 		}
-	}	
+	}
+
 }

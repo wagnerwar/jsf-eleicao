@@ -1,5 +1,6 @@
 package pacote.servlet;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,6 +22,8 @@ import pacote.bean.EleicaoBean;
 import pacote.dao.CandidatoDB;
 import pacote.dao.EleicaoDB;
 import pacote.config.ConfigStatus;
+import pacote.dao.FileManagerMongo;
+import pacote.utils.Utils;
 
 @ManagedBean(name = "candidatoFoto")
 @ViewScoped
@@ -49,9 +52,21 @@ public class CandidatoFoto extends BaseUsuarioLogado implements Serializable {
 		try {
 			
 			this.setUploadedFile(event.getFile());
+			
+			CandidatoDB db = new CandidatoDB();
+			File file = new File("/tmp", uploadedFile.getFileName());
+			String contentType = this.getUploadedFile().getContentType();
+			String extensao = Utils.getExtension(contentType);
+			boolean retorno = db.subirFoto(file, this.getCandidato(), extensao);
+			
+			if(retorno == false) {
+				throw new Exception("Erro ao subir foto de perfil");
+			}
+			
+			this.setUploadedFile(null);
+			
 			FacesContext.getCurrentInstance().addMessage(
-                    null, new FacesMessage("Upload completo",
-                    "O arquivo " + this.getUploadedFile().getFileName() + " foi salvo!"));
+                    null, new FacesMessage("Upload completo feito com sucesso!"));
 		}catch(Exception ex) {
 			FacesContext.getCurrentInstance().addMessage(
                     null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Erro", ex.getMessage()));
