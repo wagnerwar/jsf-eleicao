@@ -32,17 +32,8 @@ public class Candidato extends BaseUsuarioLogado implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private CandidatoBean informacoes;
 	private List<CandidatoBean> candidatos;
-	private UploadedFile file;
 	private List<SelectItem> generos;
-	
-	public UploadedFile getFile() {
-        return file;
-    }
- 
-    public void setFile(UploadedFile file) {
-        this.file = file;
-    }
-    
+	   
 	public CandidatoBean getInformacoes() {
 		return informacoes;
 	}
@@ -120,23 +111,7 @@ public class Candidato extends BaseUsuarioLogado implements Serializable {
 		List<CandidatoBean> candidatos = db.listarCandidatos();
 		this.candidatos = candidatos;
 	}
-	
-	 public void handleUpload(FileUploadEvent event) {
-		 try {
-			 UploadedFile file = event.getFile();
-		      this.setFile(file);
-		      
-		      byte[] contents = file.getContents();
-		      String fileContent = new String(contents);
-		      String fileName = file.getFileName();
-		      System.out.println(fileName); 
-		 }catch(Exception ex) {
-			 ex.printStackTrace();
-			 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "error", ex.getMessage()));
-		 }
-	 }
 
-	
 	public void salvar() {
 		
 	}
