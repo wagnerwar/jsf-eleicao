@@ -1,6 +1,8 @@
 package pacote.servlet;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,6 +17,8 @@ import javax.faces.model.SelectItem;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import pacote.bean.CandidatoBean;
@@ -32,6 +36,8 @@ public class CandidatoFoto extends BaseUsuarioLogado implements Serializable {
 	private CandidatoBean candidato;
 	
 	private UploadedFile uploadedFile;
+	
+	private StreamedContent imagem;
 		
 	
 	public void inicializar(CandidatoBean candidato) {
@@ -41,6 +47,18 @@ public class CandidatoFoto extends BaseUsuarioLogado implements Serializable {
 
 	public CandidatoBean getCandidato() {
 		return candidato;
+	}
+	
+	public void definirFotoCandidato() {
+		try {
+			CandidatoDB db = new CandidatoDB();
+			
+			this.setImagem(new DefaultStreamedContent(db.getFotoCandidatoDownload(candidato), db.getTipoFotoCandidato(candidato)));
+			
+		}catch(Exception ex) {
+			FacesContext.getCurrentInstance().addMessage(
+                    null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Erro", ex.getMessage()));
+		}
 	}
 
 
@@ -54,10 +72,10 @@ public class CandidatoFoto extends BaseUsuarioLogado implements Serializable {
 			this.setUploadedFile(event.getFile());
 			
 			CandidatoDB db = new CandidatoDB();
-			File file = new File("/tmp", uploadedFile.getFileName());
+			InputStream streamToUploadFrom = this.getUploadedFile().getInputstream();
 			String contentType = this.getUploadedFile().getContentType();
 			String extensao = Utils.getExtension(contentType);
-			boolean retorno = db.subirFoto(file, this.getCandidato(), extensao);
+			boolean retorno = db.subirFoto(streamToUploadFrom, this.getCandidato(), extensao, contentType);
 			
 			if(retorno == false) {
 				throw new Exception("Erro ao subir foto de perfil");
@@ -81,5 +99,15 @@ public class CandidatoFoto extends BaseUsuarioLogado implements Serializable {
 
 	public void setUploadedFile(UploadedFile uploadedFile) {
 		this.uploadedFile = uploadedFile;
+	}
+
+
+	public StreamedContent getImagem() {
+		return imagem;
+	}
+
+
+	public void setImagem(StreamedContent imagem) {
+		this.imagem = imagem;
 	}
 }

@@ -8,6 +8,7 @@ import pacote.bean.EleicaoBean;
 import pacote.config.ConfigStatus;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -164,16 +165,42 @@ public class CandidatoDB extends ConexaoMongo {
 		return c;
 	}
 	
-	public boolean subirFoto(File file, CandidatoBean candidato, String extensao) {
+	public boolean subirFoto(InputStream streamToUploadFrom, CandidatoBean candidato, String extensao, String mime) {
 		boolean retorno = false;
 		try {
 			ConexaoMongo conn = new ConexaoMongo();
 			MongoDatabase db = conn.getDb();
 			FileManagerMongo fdb = new FileManagerMongo(db);
-			retorno = fdb.salvarFotoCandidato(file, candidato, extensao);
+			retorno = fdb.salvarFotoCandidato(streamToUploadFrom, candidato, extensao, mime);
 			if(retorno == false) {
 				throw new Exception("Erro ao salvar arquivo");
 			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return retorno;
+	}
+	
+	public InputStream getFotoCandidatoDownload(CandidatoBean candidato) {
+		InputStream in = null;
+		try {
+			ConexaoMongo conn = new ConexaoMongo();
+			MongoDatabase db = conn.getDb();
+			FileManagerMongo fdb = new FileManagerMongo(db);
+			in = fdb.getFotoCandidatoDownload(candidato);
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return in;
+	}
+	
+	public String getTipoFotoCandidato(CandidatoBean candidato) {
+		String retorno = null;
+		try {
+			ConexaoMongo conn = new ConexaoMongo();
+			MongoDatabase db = conn.getDb();
+			FileManagerMongo fdb = new FileManagerMongo(db);
+			retorno = fdb.getTipoFoto(candidato);
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
