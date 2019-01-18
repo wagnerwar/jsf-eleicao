@@ -42,6 +42,7 @@ public class CandidatoFoto extends BaseUsuarioLogado implements Serializable {
 	
 	public void inicializar(CandidatoBean candidato) {
 		this.setCandidato(candidato);
+		this.definirFotoCandidato();
 	}
 
 
@@ -52,9 +53,10 @@ public class CandidatoFoto extends BaseUsuarioLogado implements Serializable {
 	public void definirFotoCandidato() {
 		try {
 			CandidatoDB db = new CandidatoDB();
-			
-			this.setImagem(new DefaultStreamedContent(db.getFotoCandidatoDownload(candidato), db.getTipoFotoCandidato(candidato)));
-			
+			InputStream in = db.getFotoCandidatoDownload(candidato);
+			if(in != null) {
+				this.setImagem(new DefaultStreamedContent(in, db.getTipoFotoCandidato(candidato)));
+			}
 		}catch(Exception ex) {
 			FacesContext.getCurrentInstance().addMessage(
                     null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Erro", ex.getMessage()));
@@ -82,6 +84,8 @@ public class CandidatoFoto extends BaseUsuarioLogado implements Serializable {
 			}
 			
 			this.setUploadedFile(null);
+			
+			this.definirFotoCandidato();
 			
 			FacesContext.getCurrentInstance().addMessage(
                     null, new FacesMessage("Upload completo feito com sucesso!"));

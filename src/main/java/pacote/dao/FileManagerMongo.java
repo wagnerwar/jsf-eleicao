@@ -77,7 +77,7 @@ public class FileManagerMongo {
 	
 	public InputStream getFotoCandidatoDownload(CandidatoBean candidato) {
 		GridFSFile arquivo = null;
-		GridFSDownloadStream stream = null;
+		//GridFSDownloadStream stream = null;
 		InputStream in = null;
 		try {
 			BasicDBObject whereQuery = new BasicDBObject();
@@ -85,7 +85,7 @@ public class FileManagerMongo {
 			GridFSFindIterable lista = this.manager.find(whereQuery);
 			arquivo = lista.first();
 			
-			stream = this.manager.openDownloadStream(arquivo.getId());
+			//stream = this.manager.openDownloadStream(arquivo.getId());
 			
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		    this.manager.downloadToStream(arquivo.getId(), baos);
