@@ -1,4 +1,4 @@
-package pacote.servlet;
+package pacote.managedBean;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,16 +33,19 @@ import pacote.utils.Utils;
 @ViewScoped
 public class CandidatoFoto extends BaseUsuarioLogado implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private CandidatoBean candidato;
 	
 	private UploadedFile uploadedFile;
 	
-	private StreamedContent imagem;
 		
 	
 	public void inicializar(CandidatoBean candidato) {
 		this.setCandidato(candidato);
-		this.definirFotoCandidato();
 	}
 
 
@@ -50,18 +53,6 @@ public class CandidatoFoto extends BaseUsuarioLogado implements Serializable {
 		return candidato;
 	}
 	
-	public void definirFotoCandidato() {
-		try {
-			CandidatoDB db = new CandidatoDB();
-			InputStream in = db.getFotoCandidatoDownload(candidato);
-			if(in != null) {
-				this.setImagem(new DefaultStreamedContent(in, db.getTipoFotoCandidato(candidato)));
-			}
-		}catch(Exception ex) {
-			FacesContext.getCurrentInstance().addMessage(
-                    null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Erro", ex.getMessage()));
-		}
-	}
 
 
 	public void setCandidato(CandidatoBean candidato) {
@@ -85,7 +76,6 @@ public class CandidatoFoto extends BaseUsuarioLogado implements Serializable {
 			
 			this.setUploadedFile(null);
 			
-			this.definirFotoCandidato();
 			
 			FacesContext.getCurrentInstance().addMessage(
                     null, new FacesMessage("Upload completo feito com sucesso!"));
@@ -103,15 +93,5 @@ public class CandidatoFoto extends BaseUsuarioLogado implements Serializable {
 
 	public void setUploadedFile(UploadedFile uploadedFile) {
 		this.uploadedFile = uploadedFile;
-	}
-
-
-	public StreamedContent getImagem() {
-		return imagem;
-	}
-
-
-	public void setImagem(StreamedContent imagem) {
-		this.imagem = imagem;
 	}
 }

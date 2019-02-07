@@ -86,20 +86,39 @@ public class FileManagerMongo {
 			arquivo = lista.first();
 			
 			//stream = this.manager.openDownloadStream(arquivo.getId());
-			
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		    this.manager.downloadToStream(arquivo.getId(), baos);
-		    
-		    byte[] imageInByte = baos.toByteArray();
-		    
-		    in = new ByteArrayInputStream(imageInByte);
-			
-		    
+			if(arquivo != null) {
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			    this.manager.downloadToStream(arquivo.getId(), baos);
+			    
+			    byte[] imageInByte = baos.toByteArray();
+			    in = new ByteArrayInputStream(imageInByte);
+			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
 		return in;
 	}
+	
+	
+	public byte[] getFotoCandidatoBinary(CandidatoBean candidato) {
+		GridFSFile arquivo = null;
+		byte[] imageInByte = null;
+		try {
+			BasicDBObject whereQuery = new BasicDBObject();
+			whereQuery.put("metadata.id_candidato", new ObjectId(candidato.getId() ) );
+			GridFSFindIterable lista = this.manager.find(whereQuery);
+			arquivo = lista.first();			
+			if(arquivo != null) {
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			    this.manager.downloadToStream(arquivo.getId(), baos);			    
+			    imageInByte = baos.toByteArray();			    
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return imageInByte;
+	}
+	
 	
 	public boolean salvarFotoCandidato(InputStream streamToUploadFrom, CandidatoBean candidato, String extensao, String mime) {
 		boolean retorno = false;

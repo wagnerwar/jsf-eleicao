@@ -1,4 +1,4 @@
-package pacote.servlet;
+package pacote.managedBean;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;

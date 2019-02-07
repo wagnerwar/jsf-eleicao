@@ -194,6 +194,20 @@ public class CandidatoDB extends ConexaoMongo {
 		return in;
 	}
 	
+	public byte[] getFotoCandidatoBinary(CandidatoBean candidato) {
+		byte[] bytes = null;
+		try {
+			ConexaoMongo conn = new ConexaoMongo();
+			MongoDatabase db = conn.getDb();
+			FileManagerMongo fdb = new FileManagerMongo(db);
+			bytes = fdb.getFotoCandidatoBinary(candidato);
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return bytes;
+	}
+	
+	
 	public String getTipoFotoCandidato(CandidatoBean candidato) {
 		String retorno = null;
 		try {
