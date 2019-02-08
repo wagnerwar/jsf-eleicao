@@ -31,6 +31,9 @@ public class ImagemCandidato extends HttpServlet {
 				if(bytes != null) {
 					String tipo_foto = db.getTipoFotoCandidato(candidato);					
 					response.reset();
+					response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+					response.setHeader("Pragma", "no-cache");
+					response.setDateHeader("Expires", 0);
 					response.setContentType(tipo_foto);					
 					response.setContentLength(bytes.length);
 					response.getOutputStream().write(bytes);
