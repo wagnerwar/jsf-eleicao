@@ -169,7 +169,7 @@
 						<h:outputText value ="Manutenção de candidatos"  />
 					</h1>
 				</f:facet>
-				<p:dataTable var="c" value="#{candidato.candidatos}">
+				<p:dataTable var="c" value="#{candidato.candidatos}" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rows="10">
 				    <p:column headerText="Nome">
 				        <h:outputText value="#{c.nome}" />
 				    </p:column>
